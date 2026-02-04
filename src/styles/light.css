@@ -1,0 +1,22 @@
+.light body {
+  background: #eef2f6;
+  color: #0b0f14;
+}
+
+.light .bg-ink {
+  background-color: #eef2f6;
+}
+
+.light .bg-night {
+  background-color: #ffffff;
+}
+
+.light .text-frost {
+  color: #0b0f14;
+}
+
+.light .text-slate-300,
+.light .text-slate-400,
+.light .text-slate-500 {
+  color: #334155;
+}
