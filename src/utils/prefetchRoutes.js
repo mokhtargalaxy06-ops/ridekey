@@ -1,0 +1,6 @@
+export const prefetchHome = () => import('../pages/Home')
+export const prefetchBikes = () => import('../pages/Bikes')
+export const prefetchBikeDetails = () => import('../pages/BikeDetails')
+export const prefetchAbout = () => import('../pages/About')
+export const prefetchBlog = () => import('../pages/Blog')
+export const prefetchContact = () => import('../pages/Contact')

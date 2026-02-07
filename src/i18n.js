@@ -11,11 +11,27 @@ const supported = [
   'ar-classical'
 ]
 
+export const supportedLanguages = supported
+
+export const languageLabels = {
+  ary: 'Darija',
+  ar: 'Arabic',
+  shi: 'Tachelhit',
+  tzm: 'Tamazight',
+  rif: 'Tarifit',
+  fr: 'Français',
+  es: 'Español',
+  en: 'English',
+  mey: 'Hassaniya',
+  'ar-classical': 'العربية الفصحى'
+}
+
 const rtlLanguages = new Set(['ary', 'ar', 'mey', 'ar-classical'])
 
 const normalizeLanguage = (lang) => {
   if (!lang) return 'en'
   const lower = lang.toLowerCase()
+  if (lower.startsWith('ar-classical')) return 'ar-classical'
   if (lower === 'ar-ma') return 'ary'
   if (lower.startsWith('ar-')) return 'ar'
   if (lower.startsWith('fr')) return 'fr'
@@ -26,7 +42,6 @@ const normalizeLanguage = (lang) => {
   if (lower.startsWith('rif')) return 'rif'
   if (lower.startsWith('mey')) return 'mey'
   if (lower.startsWith('ary')) return 'ary'
-  if (lower.startsWith('ar-classical')) return 'ar-classical'
   return supported.includes(lower) ? lower : 'en'
 }
 
@@ -42,12 +57,14 @@ export const translations = {
       motorcycles: 'Motorcycles',
       about: 'About',
       blog: 'Blog',
-      contact: 'Contact'
+      contact: 'Contact',
+      rentals: 'Rentals',
+      rides: 'Rides'
     },
     common: {
       featured: 'Featured',
       categories: 'Categories',
-      why: 'Why Riveline',
+      why: 'Why RideKey',
       journal: 'Journal',
       partners: 'Partners',
       newsletter: 'Newsletter',
@@ -59,10 +76,32 @@ export const translations = {
       total: 'Total',
       select: 'Select',
       email: 'Email address',
-      subscribe: 'Subscribe'
+      subscribe: 'Subscribe',
+      language: 'Language',
+      rides: 'Rides',
+      price: 'Price',
+      start: 'Start',
+      end: 'End'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      manualLabel: 'Manual option',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      codTitle: 'Cash on Delivery',
+      codBody:
+        'Pay in cash when your motorcycle or accessories are delivered. Our team will confirm availability and delivery details before dispatch.',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
-      heroBadge: 'Riveline Studio',
+      heroBadge: 'RideKey Studio',
       heroTitle1: 'Precision Meets Power',
       heroSub1: 'Electric performance bikes built for the next decade.',
       heroTitle2: 'Touring Redefined',
@@ -74,11 +113,18 @@ export const translations = {
       featuredTitle: 'Signature builds for every ride style.',
       viewAll: 'View all',
       categoriesTitle: 'Choose your riding language.',
-      whyTitle: 'A showroom built around riders.',
-      journalTitle: 'Latest from the studio.',
+      ridesTitle: 'Signature RideKey experiences',
+      ridesHeroBadge: 'RideKey Morocco',
+      ridesHeroTitle: 'Signature rides crafted for Morocco',
+      ridesHeroCopy: 'Adventure-first routes with local guides, premium bikes, and scenic timing built for the Atlas, desert, and coast.',
+      ridesCarouselBadge: 'Carousel',
+      ridesCarouselTitle: 'Upcoming RideKey experiences',
+      ridesCardLabel: 'Ride',
+      whyTitle: 'Built by Riders. Proven in Morocco.',
+      journalTitle: 'The latest news and adventures from RideKey in Morocco.',
       rideFilmsTitle: 'Motion from the studio floor.',
-      rideFilmsNote: 'Captured on Riveline test routes.',
-      partnersTitle: 'Brands trusted by Riveline.',
+      rideFilmsNote: 'Captured on RideKey test routes.',
+      partnersTitle: 'Brands trusted by RideKey.',
       newsletterTitle: 'Ride with the inside line.',
       newsletterCopy: 'Monthly drops on new arrivals, events, and limited builds.',
       testimonialsTitle: 'Riders who found their line.',
@@ -90,19 +136,18 @@ export const translations = {
       categoryElectricCount: '8 models',
       categoryTouring: 'Touring',
       categoryTouringCount: '14 models',
-      reason1Title: 'Curated Performance',
-      reason1Text: 'We only pick flagship trims with exclusive Riveline tuning.',
-      reason2Title: 'Certified Experts',
-      reason2Text: 'Factory-trained specialists on call for every ride.',
-      reason3Title: 'Private Test Rides',
-      reason3Text: 'Book invite-only test sessions at our studio tracks.',
-      reason4Title: 'Concierge Support',
-      reason4Text: 'From customization to delivery, we handle the details.'
-      ,
+      reason1Title: 'Adventure-Driven Selection',
+      reason1Text: 'Only trail-tested motorcycles, prepared for the Atlas Mountains, the desert, and the coast.',
+      reason2Title: 'Local Ride Experts',
+      reason2Text: 'Moroccan riders who know the roads, weather, and terrain from real experience.',
+      reason3Title: 'Latest Motorcycles of 2026',
+      reason3Text: 'We offer the newest 2026 motorcycle models, equipped with the latest technology and ready for adventure across Morocco.',
+      reason4Title: 'Premium, Hassle-Free Rentals',
+      reason4Text: 'From bike setup to delivery, we handle every detail from start to finish.',
       testimonial1Name: 'Elena Park',
       testimonial1Role: 'Touring rider',
       testimonial1Quote:
-        'Riveline made my cross-country setup feel effortless. The bike fit and concierge support were flawless.',
+        'RideKey made my cross-country setup feel effortless. The bike fit and concierge support were flawless.',
       testimonial2Name: 'Mateo Silva',
       testimonial2Role: 'Track enthusiast',
       testimonial2Quote:
@@ -110,8 +155,7 @@ export const translations = {
       testimonial3Name: 'Nina Hassan',
       testimonial3Role: 'Urban commuter',
       testimonial3Quote:
-        'From the first test ride to delivery, everything felt premium and personal. Best showroom experience yet.'
-      ,
+        'From the first test ride to delivery, everything felt premium and personal. Best showroom experience yet.',
       rideFilm1Title: 'Studio Test Ride',
       rideFilm2Title: 'Coastal Sprint'
     },
@@ -125,6 +169,8 @@ export const translations = {
       whatsappTitle: 'Send your selection.',
       whatsappNote: 'Total uses the current displayed price (lowest value for ranges).',
       sendWhatsapp: 'Send via WhatsApp',
+      sendEmail: 'Send via Email',
+      emailSubject: 'RideKey order request',
       clear: 'Clear Selection',
       selectPrompt: 'Select your motorcycles and accessories, then use WhatsApp Checkout below to send your request.',
       messageIntro: 'Hi! I want to order the following:',
@@ -161,7 +207,7 @@ export const translations = {
     about: {
       title: 'A studio for modern riders.',
       copy:
-        'Riveline blends boutique retail with performance engineering. Our curators, designers, and technicians build a showroom where every bike feels tailor-made for its rider.',
+        'RideKey blends boutique retail with performance engineering. Our curators, designers, and technicians build a showroom where every bike feels tailor-made for its rider.',
       buildTitle: 'Signature Builds',
       buildCopy: 'Limited-run configurations with bespoke finishes and performance upgrades.',
       trustTitle: 'Trusted Partners',
@@ -173,6 +219,8 @@ export const translations = {
     contact: {
       title: 'Let’s plan your next ride.',
       sendWhatsapp: 'Send Request via WhatsApp',
+      sendEmail: 'Send via Email',
+      emailSubject: 'RideKey test ride request',
       namePlaceholder: 'Full name',
       emailPlaceholder: 'Email address',
       modelPlaceholder: 'Preferred model',
@@ -188,12 +236,25 @@ export const translations = {
       showroomTitle: 'Showroom',
       contactTitle: 'Contact'
     },
+    rentals: {
+      badge: 'Rentals',
+      title: 'Book a motorcycle rental.',
+      renterName: 'Renter name',
+      renterPhone: 'Phone number',
+      startDate: 'Start date',
+      endDate: 'End date',
+      pickupTime: 'Pickup time',
+      returnTime: 'Return time',
+      selectBike: 'Select a bike',
+      messageLabel: 'Rental details',
+      sendWhatsapp: 'Send rental via WhatsApp'
+    },
     footer: {
-      title: 'Riveline Motorcycles',
+      title: 'RideKey Motorcycles',
       copy: 'Curated performance machines, boutique service, and rider-first experiences.',
       company: 'Company',
       follow: 'Follow',
-      rights: '© 2026 Riveline Motorcycles. All rights reserved.',
+      rights: '© 2026 RideKey Motorcycles. All rights reserved.',
       links: ['Inventory', 'Financing', 'Support', 'Press', 'Careers']
     }
   },
@@ -203,12 +264,14 @@ export const translations = {
       motorcycles: 'Motos',
       about: 'À propos',
       blog: 'Blog',
-      contact: 'Contact'
+      contact: 'Contact',
+      rides: 'Sorties',
+      rentals: 'Location',
     },
     common: {
       featured: 'Sélection',
       categories: 'Catégories',
-      why: 'Pourquoi Riveline',
+      why: 'Pourquoi RideKey',
       journal: 'Journal',
       partners: 'Partenaires',
       newsletter: 'Newsletter',
@@ -220,10 +283,31 @@ export const translations = {
       total: 'Total',
       select: 'Sélectionner',
       email: 'Adresse e-mail',
-      subscribe: 'S’abonner'
+      subscribe: 'S’abonner',
+      rides: 'Sorties',
+      price: 'Prix',
+      start: 'Début',
+      end: 'Fin'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      manualLabel: 'Manual option',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      codTitle: 'Cash on Delivery',
+      codBody:
+        'Pay in cash when your motorcycle or accessories are delivered. Our team will confirm availability and delivery details before dispatch.',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
-      heroBadge: 'Studio Riveline',
+      heroBadge: 'Studio RideKey',
       heroTitle1: 'Précision et Puissance',
       heroSub1: 'Des motos électriques conçues pour la prochaine décennie.',
       heroTitle2: 'Le Touring Réinventé',
@@ -235,10 +319,17 @@ export const translations = {
       featuredTitle: 'Des modèles signature pour chaque style.',
       viewAll: 'Voir tout',
       categoriesTitle: 'Choisissez votre style de conduite.',
-      whyTitle: 'Un showroom pensé pour les riders.',
-      journalTitle: 'Dernières actus du studio.',
+      ridesTitle: 'Expériences RideKey signature',
+      ridesHeroBadge: 'RideKey Maroc',
+      ridesHeroTitle: 'Des rides signature conçus pour le Maroc',
+      ridesHeroCopy: 'Des itinéraires axés aventure avec guides locaux, motos premium et timing pensé pour l’Atlas, le désert et la côte.',
+      ridesCarouselBadge: 'Carrousel',
+      ridesCarouselTitle: 'Prochaines expériences RideKey',
+      ridesCardLabel: 'Ride',
+      whyTitle: 'Conçu par des riders. Éprouvé au Maroc.',
+      journalTitle: 'Les dernières actus et aventures RideKey au Maroc.',
       rideFilmsTitle: 'Images du studio.',
-      rideFilmsNote: 'Capturé sur les routes Riveline.',
+      rideFilmsNote: 'Capturé sur les routes RideKey.',
       partnersTitle: 'Marques de confiance.',
       newsletterTitle: 'Restez informé.',
       newsletterCopy: 'Nouveautés, événements et séries limitées.',
@@ -251,19 +342,18 @@ export const translations = {
       categoryElectricCount: '8 modèles',
       categoryTouring: 'Touring',
       categoryTouringCount: '14 modèles',
-      reason1Title: 'Performance Sélectionnée',
-      reason1Text: 'Nous choisissons des versions phares avec réglage Riveline.',
-      reason2Title: 'Experts Certifiés',
-      reason2Text: 'Spécialistes formés en usine à chaque ride.',
-      reason3Title: 'Essais Privés',
-      reason3Text: 'Sessions sur piste en accès privé.',
-      reason4Title: 'Conciergerie',
-      reason4Text: 'De la config à la livraison, on gère tout.'
-      ,
+      reason1Title: 'Sélection axée aventure',
+      reason1Text: 'Uniquement des motos testées sur piste, préparées pour l’Atlas, le désert et la côte.',
+      reason2Title: 'Experts locaux du ride',
+      reason2Text: 'Des riders marocains qui connaissent routes, météo et terrains par expérience réelle.',
+      reason3Title: 'Dernières motos 2026',
+      reason3Text: 'Nous proposons les derniers modèles 2026, avec les technologies les plus récentes, prêts pour l’aventure au Maroc.',
+      reason4Title: 'Locations premium sans stress',
+      reason4Text: 'De la préparation à la livraison, on gère chaque détail de bout en bout.',
       testimonial1Name: 'Elena Park',
       testimonial1Role: 'Rider touring',
       testimonial1Quote:
-        'Riveline a rendu ma préparation cross-country simple. Ajustement parfait et service impeccable.',
+        'RideKey a rendu ma préparation cross-country simple. Ajustement parfait et service impeccable.',
       testimonial2Name: 'Mateo Silva',
       testimonial2Role: 'Passionné de piste',
       testimonial2Quote:
@@ -271,8 +361,7 @@ export const translations = {
       testimonial3Name: 'Nina Hassan',
       testimonial3Role: 'Commuter urbain',
       testimonial3Quote:
-        'De l’essai à la livraison, tout était premium et personnalisé. Meilleure expérience showroom.'
-      ,
+        'De l’essai à la livraison, tout était premium et personnalisé. Meilleure expérience showroom.',
       rideFilm1Title: 'Essai Studio',
       rideFilm2Title: 'Sprint Côtier'
     },
@@ -286,6 +375,8 @@ export const translations = {
       whatsappTitle: 'Envoyer votre sélection.',
       whatsappNote: 'Le total utilise le prix affiché (valeur la plus basse).',
       sendWhatsapp: 'Envoyer via WhatsApp',
+      sendEmail: 'Envoyer par e-mail',
+      emailSubject: 'Demande de commande RideKey',
       clear: 'Réinitialiser',
       selectPrompt:
         'Sélectionnez vos motos et accessoires, puis utilisez la commande WhatsApp ci-dessous pour envoyer votre demande.',
@@ -323,7 +414,7 @@ export const translations = {
     about: {
       title: 'Un studio pour les riders modernes.',
       copy:
-        'Riveline associe boutique haut de gamme et ingénierie performance. Notre équipe crée un showroom où chaque moto est taillée pour son pilote.',
+        'RideKey associe boutique haut de gamme et ingénierie performance. Notre équipe crée un showroom où chaque moto est taillée pour son pilote.',
       buildTitle: 'Modèles signature',
       buildCopy: 'Séries limitées et finitions sur mesure.',
       trustTitle: 'Partenaires de confiance',
@@ -333,6 +424,8 @@ export const translations = {
     contact: {
       title: 'Planifions votre prochain ride.',
       sendWhatsapp: 'Envoyer via WhatsApp',
+      sendEmail: 'Envoyer par e-mail',
+      emailSubject: 'Demande d’essai RideKey',
       namePlaceholder: 'Nom complet',
       emailPlaceholder: 'Adresse e-mail',
       modelPlaceholder: 'Modèle préféré',
@@ -348,12 +441,26 @@ export const translations = {
       showroomTitle: 'Showroom',
       contactTitle: 'Contact'
     },
+    rentals: {
+      badge: 'Location',
+      title: 'Réserver une location de moto.',
+      renterName: 'Nom du locataire',
+      renterPhone: 'Numéro de téléphone',
+      startDate: 'Date de début',
+      endDate: 'Date de fin',
+      pickupTime: 'Heure de prise',
+      returnTime: 'Heure de retour',
+      selectBike: 'Choisir une moto',
+      messageLabel: 'Détails de location',
+      sendWhatsapp: 'Envoyer la location via WhatsApp',
+      emailSubject: 'Demande de location RideKey'
+    },
     footer: {
-      title: 'Riveline Motorcycles',
+      title: 'RideKey Motorcycles',
       copy: 'Machines premium, service boutique, expérience rider.',
       company: 'Entreprise',
       follow: 'Suivre',
-      rights: '© 2026 Riveline Motorcycles. Tous droits réservés.',
+      rights: '© 2026 RideKey Motorcycles. Tous droits réservés.',
       links: ['Stock', 'Financement', 'Support', 'Presse', 'Carrières']
     }
   },
@@ -363,12 +470,14 @@ export const translations = {
       motorcycles: 'Motos',
       about: 'Nosotros',
       blog: 'Blog',
-      contact: 'Contacto'
+      contact: 'Contacto',
+      rides: 'Rutas',
+      rentals: 'Alquileres',
     },
     common: {
       featured: 'Destacados',
       categories: 'Categorías',
-      why: 'Por qué Riveline',
+      why: 'Por qué RideKey',
       journal: 'Journal',
       partners: 'Socios',
       newsletter: 'Newsletter',
@@ -380,10 +489,31 @@ export const translations = {
       total: 'Total',
       select: 'Seleccionar',
       email: 'Correo electrónico',
-      subscribe: 'Suscribirse'
+      subscribe: 'Suscribirse',
+      rides: 'Rutas',
+      price: 'Precio',
+      start: 'Inicio',
+      end: 'Fin'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      manualLabel: 'Manual option',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      codTitle: 'Cash on Delivery',
+      codBody:
+        'Pay in cash when your motorcycle or accessories are delivered. Our team will confirm availability and delivery details before dispatch.',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
-      heroBadge: 'Riveline Studio',
+      heroBadge: 'RideKey Studio',
       heroTitle1: 'Precisión y Potencia',
       heroSub1: 'Motos eléctricas diseñadas para la próxima década.',
       heroTitle2: 'Touring Reimaginado',
@@ -395,10 +525,17 @@ export const translations = {
       featuredTitle: 'Modelos premium para cada estilo.',
       viewAll: 'Ver todo',
       categoriesTitle: 'Elige tu estilo de conducción.',
-      whyTitle: 'Un showroom pensado para riders.',
-      journalTitle: 'Lo último del estudio.',
+      ridesTitle: 'Experiencias RideKey distintivas',
+      ridesHeroBadge: 'RideKey Marruecos',
+      ridesHeroTitle: 'Rutas signature creadas para Marruecos',
+      ridesHeroCopy: 'Rutas centradas en la aventura con guías locales, motos premium y tiempos pensados para el Atlas, el desierto y la costa.',
+      ridesCarouselBadge: 'Carrusel',
+      ridesCarouselTitle: 'Próximas experiencias RideKey',
+      ridesCardLabel: 'Ruta',
+      whyTitle: 'Creado por riders. Probado en Marruecos.',
+      journalTitle: 'Las últimas noticias y aventuras de RideKey en Marruecos.',
       rideFilmsTitle: 'Movimiento desde el estudio.',
-      rideFilmsNote: 'Capturado en rutas Riveline.',
+      rideFilmsNote: 'Capturado en rutas RideKey.',
       partnersTitle: 'Marcas confiables.',
       newsletterTitle: 'Recibe novedades.',
       newsletterCopy: 'Nuevas llegadas, eventos y ediciones limitadas.',
@@ -411,19 +548,18 @@ export const translations = {
       categoryElectricCount: '8 modelos',
       categoryTouring: 'Touring',
       categoryTouringCount: '14 modelos',
-      reason1Title: 'Rendimiento Curado',
-      reason1Text: 'Solo elegimos versiones premium con ajuste Riveline.',
-      reason2Title: 'Expertos Certificados',
-      reason2Text: 'Especialistas formados en fábrica en cada entrega.',
-      reason3Title: 'Pruebas Privadas',
-      reason3Text: 'Sesiones exclusivas en pista del estudio.',
-      reason4Title: 'Concierge',
-      reason4Text: 'De la personalización a la entrega, lo gestionamos.'
-      ,
+      reason1Title: 'Selección guiada por la aventura',
+      reason1Text: 'Solo motos probadas en ruta, preparadas para el Atlas, el desierto y la costa.',
+      reason2Title: 'Expertos locales de ruta',
+      reason2Text: 'Riders marroquíes que conocen carreteras, clima y terreno por experiencia real.',
+      reason3Title: 'Últimas motos 2026',
+      reason3Text: 'Ofrecemos los modelos 2026 más recientes, con la última tecnología y listos para la aventura en Marruecos.',
+      reason4Title: 'Alquiler premium sin complicaciones',
+      reason4Text: 'Desde la preparación hasta la entrega, gestionamos cada detalle de principio a fin.',
       testimonial1Name: 'Elena Park',
       testimonial1Role: 'Rider touring',
       testimonial1Quote:
-        'Riveline hizo que mi preparación para viajar fuera sencilla. Ajuste perfecto y servicio impecable.',
+        'RideKey hizo que mi preparación para viajar fuera sencilla. Ajuste perfecto y servicio impecable.',
       testimonial2Name: 'Mateo Silva',
       testimonial2Role: 'Entusiasta de pista',
       testimonial2Quote:
@@ -431,8 +567,7 @@ export const translations = {
       testimonial3Name: 'Nina Hassan',
       testimonial3Role: 'Commuter urbana',
       testimonial3Quote:
-        'Desde la prueba hasta la entrega, todo fue premium y personal. La mejor experiencia de showroom.'
-      ,
+        'Desde la prueba hasta la entrega, todo fue premium y personal. La mejor experiencia de showroom.',
       rideFilm1Title: 'Prueba en Estudio',
       rideFilm2Title: 'Sprint Costero'
     },
@@ -446,6 +581,8 @@ export const translations = {
       whatsappTitle: 'Enviar tu selección.',
       whatsappNote: 'Total con el precio mostrado (valor más bajo).',
       sendWhatsapp: 'Enviar por WhatsApp',
+      sendEmail: 'Enviar por correo',
+      emailSubject: 'Solicitud de pedido RideKey',
       clear: 'Limpiar selección',
       selectPrompt:
         'Selecciona motos y accesorios, luego usa la compra por WhatsApp para enviar tu solicitud.',
@@ -483,7 +620,7 @@ export const translations = {
     about: {
       title: 'Un estudio para riders modernos.',
       copy:
-        'Riveline combina boutique premium e ingeniería de rendimiento. Creamos un showroom donde cada moto es a medida.',
+        'RideKey combina boutique premium e ingeniería de rendimiento. Creamos un showroom donde cada moto es a medida.',
       buildTitle: 'Modelos Signature',
       buildCopy: 'Ediciones limitadas con acabados personalizados.',
       trustTitle: 'Socios confiables',
@@ -493,6 +630,8 @@ export const translations = {
     contact: {
       title: 'Planifiquemos tu próximo ride.',
       sendWhatsapp: 'Enviar por WhatsApp',
+      sendEmail: 'Enviar por correo',
+      emailSubject: 'Solicitud de prueba RideKey',
       namePlaceholder: 'Nombre completo',
       emailPlaceholder: 'Correo electrónico',
       modelPlaceholder: 'Modelo preferido',
@@ -508,12 +647,26 @@ export const translations = {
       showroomTitle: 'Showroom',
       contactTitle: 'Contacto'
     },
+    rentals: {
+      badge: 'Alquiler',
+      title: 'Reservar un alquiler de moto.',
+      renterName: 'Nombre del arrendatario',
+      renterPhone: 'Número de teléfono',
+      startDate: 'Fecha de inicio',
+      endDate: 'Fecha de fin',
+      pickupTime: 'Hora de recogida',
+      returnTime: 'Hora de devolución',
+      selectBike: 'Elegir una moto',
+      messageLabel: 'Detalles del alquiler',
+      sendWhatsapp: 'Enviar alquiler por WhatsApp',
+      emailSubject: 'Solicitud de alquiler RideKey'
+    },
     footer: {
-      title: 'Riveline Motorcycles',
+      title: 'RideKey Motorcycles',
       copy: 'Motos premium, servicio boutique y experiencia rider.',
       company: 'Empresa',
       follow: 'Seguir',
-      rights: '© 2026 Riveline Motorcycles. Todos los derechos reservados.',
+      rights: '© 2026 RideKey Motorcycles. Todos los derechos reservados.',
       links: ['Inventario', 'Financiación', 'Soporte', 'Prensa', 'Carreras']
     }
   },
@@ -523,7 +676,9 @@ export const translations = {
       motorcycles: 'الدراجات',
       about: 'من نحن',
       blog: 'المدونة',
-      contact: 'تواصل'
+      contact: 'تواصل',
+      rides: 'الرحلات',
+      rentals: 'التأجير',
     },
     common: {
       featured: 'المختارة',
@@ -540,7 +695,28 @@ export const translations = {
       total: 'الإجمالي',
       select: 'اختيار',
       email: 'البريد الإلكتروني',
-      subscribe: 'اشتراك'
+      subscribe: 'اشتراك',
+      rides: 'الرحلات',
+      price: 'السعر',
+      start: 'البدء',
+      end: 'النهاية'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      manualLabel: 'Manual option',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      codTitle: 'Cash on Delivery',
+      codBody:
+        'Pay in cash when your motorcycle or accessories are delivered. Our team will confirm availability and delivery details before dispatch.',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
       heroBadge: 'استوديو ريفلاين',
@@ -555,8 +731,15 @@ export const translations = {
       featuredTitle: 'نماذج مميزة لكل أسلوب.',
       viewAll: 'عرض الكل',
       categoriesTitle: 'اختر أسلوب قيادتك.',
-      whyTitle: 'معرض مبني حول الراكب.',
-      journalTitle: 'آخر أخبار الاستوديو.',
+      ridesTitle: 'تجارب RideKey المميزة',
+      ridesHeroBadge: 'RideKey المغرب',
+      ridesHeroTitle: 'رحلات مميزة صُممت للمغرب',
+      ridesHeroCopy: 'مسارات تركز على المغامرة مع مرشدين محليين ودراجات فاخرة وتوقيت مثالي للأطلس والصحراء والساحل.',
+      ridesCarouselBadge: 'كاروسيل',
+      ridesCarouselTitle: 'تجارب RideKey القادمة',
+      ridesCardLabel: 'رحلة',
+      whyTitle: 'مبني بأيدي راكبين. مُجرَّب في المغرب.',
+      journalTitle: 'آخر الأخبار والمغامرات من RideKey في المغرب.',
       rideFilmsTitle: 'حركة من أرض الاستوديو.',
       rideFilmsNote: 'مصورة على مسارات ريفلاين.',
       partnersTitle: 'علامات نثق بها.',
@@ -571,15 +754,14 @@ export const translations = {
       categoryElectricCount: '8 نماذج',
       categoryTouring: 'رحلات',
       categoryTouringCount: '14 نموذجاً',
-      reason1Title: 'أداء مُنتقى',
-      reason1Text: 'نختار الفئات الرائدة بضبط ريفلاين الحصري.',
-      reason2Title: 'خبراء معتمدون',
-      reason2Text: 'مختصون مدربون لدى المصنع لكل رحلة.',
-      reason3Title: 'تجارب خاصة',
-      reason3Text: 'جلسات تجريبية خاصة على مساراتنا.',
-      reason4Title: 'دعم كونسيرج',
-      reason4Text: 'من التخصيص إلى التسليم، نحن نهتم بالتفاصيل.'
-      ,
+      reason1Title: 'اختيار مدفوع بالمغامرة',
+      reason1Text: 'فقط دراجات مجرّبة على المسارات، مُجهزة للأطلس والصحراء والساحل.',
+      reason2Title: 'خبراء ركوب محليون',
+      reason2Text: 'راكبون مغاربة يعرفون الطرق والطقس والتضاريس من خبرة فعلية.',
+      reason3Title: 'أحدث دراجات 2026',
+      reason3Text: 'نوفر أحدث موديلات 2026 بتقنيات متقدمة وجاهزة للمغامرة عبر المغرب.',
+      reason4Title: 'تأجير فاخر بلا عناء',
+      reason4Text: 'من تجهيز الدراجة إلى التسليم، نتولى كل التفاصيل من البداية للنهاية.',
       testimonial1Name: 'إيلينا بارك',
       testimonial1Role: 'راكبة رحلات',
       testimonial1Quote:
@@ -591,8 +773,7 @@ export const translations = {
       testimonial3Name: 'نينا حسن',
       testimonial3Role: 'تنقل حضري',
       testimonial3Quote:
-        'من أول تجربة حتى التسليم، كل شيء كان راقياً وشخصياً. أفضل تجربة معرض.'
-      ,
+        'من أول تجربة حتى التسليم، كل شيء كان راقياً وشخصياً. أفضل تجربة معرض.',
       rideFilm1Title: 'تجربة الاستوديو',
       rideFilm2Title: 'سباق الساحل'
     },
@@ -606,6 +787,8 @@ export const translations = {
       whatsappTitle: 'أرسل اختيارك.',
       whatsappNote: 'الإجمالي يعتمد على السعر المعروض (الأدنى في المدى).',
       sendWhatsapp: 'إرسال عبر واتساب',
+      sendEmail: 'إرسال عبر البريد الإلكتروني',
+      emailSubject: 'طلب ريفلاين',
       clear: 'مسح الاختيار',
       selectPrompt:
         'اختر الدراجات والإكسسوارات، ثم استخدم طلب واتساب أدناه لإرسال طلبك.',
@@ -653,6 +836,8 @@ export const translations = {
     contact: {
       title: 'لنخطط لرحلتك القادمة.',
       sendWhatsapp: 'إرسال عبر واتساب',
+      sendEmail: 'إرسال عبر البريد الإلكتروني',
+      emailSubject: 'طلب تجربة ريفلاين',
       namePlaceholder: 'الاسم الكامل',
       emailPlaceholder: 'البريد الإلكتروني',
       modelPlaceholder: 'الموديل المفضل',
@@ -667,6 +852,20 @@ export const translations = {
       hoursWeekend: 'الأحد · بمواعيد خاصة',
       showroomTitle: 'المعرض',
       contactTitle: 'تواصل'
+    },
+    rentals: {
+      badge: 'التأجير',
+      title: 'احجز تأجير دراجة نارية.',
+      renterName: 'اسم المستأجر',
+      renterPhone: 'رقم الهاتف',
+      startDate: 'تاريخ البدء',
+      endDate: 'تاريخ الانتهاء',
+      pickupTime: 'وقت الاستلام',
+      returnTime: 'وقت الإرجاع',
+      selectBike: 'اختر دراجة',
+      messageLabel: 'تفاصيل التأجير',
+      sendWhatsapp: 'أرسل التأجير عبر واتساب',
+      emailSubject: 'طلب تأجير RideKey'
     },
     footer: {
       title: 'ريفلاين للدراجات',
@@ -683,7 +882,9 @@ export const translations = {
       motorcycles: 'الموطورات',
       about: 'شكون حنا',
       blog: 'البلوغ',
-      contact: 'تواصل'
+      contact: 'تواصل',
+      rides: 'الرايدات',
+      rentals: 'الكراء',
     },
     common: {
       featured: 'المختارة',
@@ -700,7 +901,28 @@ export const translations = {
       total: 'المجموع',
       select: 'اختار',
       email: 'الإيميل',
-      subscribe: 'سجل'
+      subscribe: 'سجل',
+      rides: 'الرايدات',
+      price: 'الثمن',
+      start: 'البداية',
+      end: 'النهاية'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      manualLabel: 'Manual option',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      codTitle: 'Cash on Delivery',
+      codBody:
+        'Pay in cash when your motorcycle or accessories are delivered. Our team will confirm availability and delivery details before dispatch.',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
       heroBadge: 'ستوديو ريفلاين',
@@ -715,8 +937,15 @@ export const translations = {
       featuredTitle: 'نماذج مميزة لكل ستايل.',
       viewAll: 'شوف الكل',
       categoriesTitle: 'اختار ستايل السياقة ديالك.',
-      whyTitle: 'شوروم مبني على الراكب.',
-      journalTitle: 'آخر أخبار الستوديو.',
+      ridesTitle: 'تجارب RideKey المميّزة',
+      ridesHeroBadge: 'RideKey المغرب',
+      ridesHeroTitle: 'رايدات مميّزين موجدين للمغرب',
+      ridesHeroCopy: 'مسالك ديال المغامرة مع گيد محليين، موتورات بريميوم، وتوقيت مبرمج للأطلس والصحرا والساحل.',
+      ridesCarouselBadge: 'كاروسيل',
+      ridesCarouselTitle: 'تجارب RideKey اللي جاية',
+      ridesCardLabel: 'رايد',
+      whyTitle: 'مبنِي من عند الراكبين ومجرّب فالمغرب.',
+      journalTitle: 'آخر الأخبار والمغامرات ديال RideKey فالمغرب.',
       rideFilmsTitle: 'حركة من قلب الستوديو.',
       rideFilmsNote: 'مصور فمسارات ريفلاين.',
       partnersTitle: 'ماركات كنثقو فيها.',
@@ -731,15 +960,14 @@ export const translations = {
       categoryElectricCount: '8 نماذج',
       categoryTouring: 'تورينغ',
       categoryTouringCount: '14 نماذج',
-      reason1Title: 'أداء مختار',
-      reason1Text: 'كنختارو النسخ الرائدة بتعديل ريفلاين.',
-      reason2Title: 'خبراء معتمدين',
-      reason2Text: 'متخصصين مدربين على المصنع لكل راكب.',
-      reason3Title: 'تجارب خاصة',
-      reason3Text: 'سيصيونات تجريبية خاصة فالمسارات ديالنا.',
-      reason4Title: 'خدمة كونسيرج',
-      reason4Text: 'من التخصيص حتى للتسليم كنتهلاو فالتفاصيل.'
-      ,
+      reason1Title: 'اختيار ديال المغامرة',
+      reason1Text: 'غير الموتورات المجرّبين فالمسالك، واجدين للأطلس والصحرا والساحل.',
+      reason2Title: 'خبراء ديال الركوب محليين',
+      reason2Text: 'راكبين مغاربة عارفين الطرق والجو والتضاريس من التجربة.',
+      reason3Title: 'آخر موديلات 2026',
+      reason3Text: 'كنقدمو أحدث موديلات 2026 بتكنولوجيا جديدة وجاهزة لمغامرات فالمغرب.',
+      reason4Title: 'كراء بريميوم بلا صداع',
+      reason4Text: 'من تجهيز الموطور حتى للتسليم، كنْتكلفو بجميع التفاصيل.',
       testimonial1Name: 'إيلينا بارك',
       testimonial1Role: 'راكبة ديال الرحلات',
       testimonial1Quote:
@@ -751,8 +979,7 @@ export const translations = {
       testimonial3Name: 'نينا حسن',
       testimonial3Role: 'تنقل حضري',
       testimonial3Quote:
-        'من أول تجربة حتى للتسليم، كلشي كان راقي وشخصي. أحسن شوروم.'
-      ,
+        'من أول تجربة حتى للتسليم، كلشي كان راقي وشخصي. أحسن شوروم.',
       rideFilm1Title: 'تجربة فالستوديو',
       rideFilm2Title: 'سباق الساحل'
     },
@@ -766,6 +993,8 @@ export const translations = {
       whatsappTitle: 'صيفط الاختيار ديالك.',
       whatsappNote: 'المجموع كيعتمد على الثمن المعروض (الأقل فالنطاق).',
       sendWhatsapp: 'صيفط عبر واتساب',
+      sendEmail: 'صيفط عبر الإيميل',
+      emailSubject: 'طلب ريفلاين',
       clear: 'مسح الاختيار',
       selectPrompt:
         'اختار الموطورات والإكسسوارات، ومن بعد صيفط الطلب عبر واتساب لتحت.',
@@ -813,6 +1042,8 @@ export const translations = {
     contact: {
       title: 'نخططو للرحلة الجاية ديالك.',
       sendWhatsapp: 'صيفط عبر واتساب',
+      sendEmail: 'صيفط عبر الإيميل',
+      emailSubject: 'طلب تجربة ريفلاين',
       namePlaceholder: 'السمية كاملة',
       emailPlaceholder: 'الإيميل',
       modelPlaceholder: 'الموديل المفضل',
@@ -827,6 +1058,20 @@ export const translations = {
       hoursWeekend: 'الأحد · بالمواعيد فقط',
       showroomTitle: 'الشوروم',
       contactTitle: 'تواصل'
+    },
+    rentals: {
+      badge: 'الكراء',
+      title: 'حجز كراء ديال موطور.',
+      renterName: 'سمية الكاري',
+      renterPhone: 'نمرة التليفون',
+      startDate: 'تاريخ البداية',
+      endDate: 'تاريخ النهاية',
+      pickupTime: 'وقت الاستلام',
+      returnTime: 'وقت الإرجاع',
+      selectBike: 'ختار موطور',
+      messageLabel: 'تفاصيل الكراء',
+      sendWhatsapp: 'صيفط الكراء عبر واتساب',
+      emailSubject: 'طلب كراء RideKey'
     },
     footer: {
       title: 'ريفلاين للموتورات',
@@ -843,12 +1088,14 @@ export const translations = {
       motorcycles: 'Imtura',
       about: 'Fella-nneɣ',
       blog: 'Ablug',
-      contact: 'Nniy'
+      contact: 'Nniy',
+      rides: 'Rides',
+      rentals: 'Rentals',
     },
     common: {
       featured: 'Yettwafren',
       categories: 'Tiskrin',
-      why: 'Acu i Riveline',
+      why: 'Acu i RideKey',
       journal: 'Aɣmis',
       partners: 'Imdukal',
       newsletter: 'Aɣmis n yinen',
@@ -860,10 +1107,31 @@ export const translations = {
       total: 'Asemmi',
       select: 'Fren',
       email: 'Imayl',
-      subscribe: 'Areg'
+      subscribe: 'Areg',
+      rides: 'Rides',
+      price: 'Price',
+      start: 'Start',
+      end: 'End'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      manualLabel: 'Manual option',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      codTitle: 'Cash on Delivery',
+      codBody:
+        'Pay in cash when your motorcycle or accessories are delivered. Our team will confirm availability and delivery details before dispatch.',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
-      heroBadge: 'Riveline Studio',
+      heroBadge: 'RideKey Studio',
       heroTitle1: 'Ttqis d Tazrawt',
       heroSub1: 'Imtura iɣribanen i tɣaṛa n tikkelt.',
       heroTitle2: 'Touring iḍris',
@@ -875,10 +1143,17 @@ export const translations = {
       featuredTitle: 'Timenẓiyin i yal aɣaras.',
       viewAll: 'Wali akk',
       categoriesTitle: 'Fren tislit n uslal.',
-      whyTitle: 'Aksum iɣ i remtan.',
-      journalTitle: 'Aneɣṛi n studio.',
+      ridesTitle: 'Signature RideKey experiences',
+      ridesHeroBadge: 'RideKey Morocco',
+      ridesHeroTitle: 'Signature rides crafted for Morocco',
+      ridesHeroCopy: 'Adventure-first routes with local guides, premium bikes, and scenic timing built for the Atlas, desert, and coast.',
+      ridesCarouselBadge: 'Carousel',
+      ridesCarouselTitle: 'Upcoming RideKey experiences',
+      ridesCardLabel: 'Ride',
+      whyTitle: 'Built by Riders. Proven in Morocco.',
+      journalTitle: 'The latest news and adventures from RideKey in Morocco.',
       rideFilmsTitle: 'Tadut n studio.',
-      rideFilmsNote: 'Yettwakem iɣ trusan Riveline.',
+      rideFilmsNote: 'Yettwakem iɣ trusan RideKey.',
       partnersTitle: 'Timarka yettwaselken.',
       newsletterTitle: 'Aruf tura.',
       newsletterCopy: 'Timenẓiyin, tɣerbin, d yisniwen.',
@@ -891,19 +1166,18 @@ export const translations = {
       categoryElectricCount: '8 timsemmarin',
       categoryTouring: 'Touring',
       categoryTouringCount: '14 timsemmarin',
-      reason1Title: 'Tazrawt yettwasem',
-      reason1Text: 'Nefren kan timenẓiyin n tazrawt.',
-      reason2Title: 'Imrugan yettwasmaren',
-      reason2Text: 'Imdawa n tazrart i yal aɣaras.',
-      reason3Title: 'Ttgerbin n uḍris',
-      reason3Text: 'Ttgerbin n ufran ɣef usnif.',
-      reason4Title: 'Asenqed n tazrawt',
-      reason4Text: 'Seg usekki ɣer uzem, nelli ntewwi.'
-      ,
+      reason1Title: 'Adventure-Driven Selection',
+      reason1Text: 'Only trail-tested motorcycles, prepared for the Atlas Mountains, the desert, and the coast.',
+      reason2Title: 'Local Ride Experts',
+      reason2Text: 'Moroccan riders who know the roads, weather, and terrain from real experience.',
+      reason3Title: 'Latest Motorcycles of 2026',
+      reason3Text: 'We offer the newest 2026 motorcycle models, equipped with the latest technology and ready for adventure across Morocco.',
+      reason4Title: 'Premium, Hassle-Free Rentals',
+      reason4Text: 'From bike setup to delivery, we handle every detail from start to finish.',
       testimonial1Name: 'Elena Park',
       testimonial1Role: 'Amrag n touring',
       testimonial1Quote:
-        'Riveline tesselm ttuɣal n useɣlal. Aseggwas d tten yufran.',
+        'RideKey tesselm ttuɣal n useɣlal. Aseggwas d tten yufran.',
       testimonial2Name: 'Mateo Silva',
       testimonial2Role: 'Amrag n tɣar',
       testimonial2Quote:
@@ -911,8 +1185,7 @@ export const translations = {
       testimonial3Name: 'Nina Hassan',
       testimonial3Role: 'Amrag n taddart',
       testimonial3Quote:
-        'Seg tgerbit ɣer uzem, kulši yella yufran d amḍan.'
-      ,
+        'Seg tgerbit ɣer uzem, kulši yella yufran d amḍan.',
       rideFilm1Title: 'Ttgerbit n Studio',
       rideFilm2Title: 'Sprint n Ugmma'
     },
@@ -926,6 +1199,8 @@ export const translations = {
       whatsappTitle: 'Sifed afran-inek.',
       whatsappNote: 'Asemmi d awal n tazwart (azemz n wudem).',
       sendWhatsapp: 'Sifed s WhatsApp',
+      sendEmail: 'Sifed s Email',
+      emailSubject: 'Asuter n RideKey',
       clear: 'Sfeḍ afran',
       selectPrompt:
         'Fren imtura d uṭṭil, sakin sifed talɣa s WhatsApp ddaw.',
@@ -963,7 +1238,7 @@ export const translations = {
     about: {
       title: 'Studio i imrugan n tura.',
       copy:
-        'Riveline yessusm d tasnakt n tazrawt. Nessizdi studio ad yili yal mtur yufit i umrag.',
+        'RideKey yessusm d tasnakt n tazrawt. Nessizdi studio ad yili yal mtur yufit i umrag.',
       buildTitle: 'Timenẓiyin',
       buildCopy: 'Yisniwen imeẓyanen d iggan.',
       trustTitle: 'Imdukal yettwaselken',
@@ -973,6 +1248,8 @@ export const translations = {
     contact: {
       title: 'Nselkem tura i uslal-inek.',
       sendWhatsapp: 'Sifed s WhatsApp',
+      sendEmail: 'Sifed s Email',
+      emailSubject: 'Asuter n tɣerbit RideKey',
       namePlaceholder: 'Isem ummid',
       emailPlaceholder: 'Imayl',
       modelPlaceholder: 'Amodel i tferneḍ',
@@ -988,12 +1265,26 @@ export const translations = {
       showroomTitle: 'Aksum',
       contactTitle: 'Nniy'
     },
+    rentals: {
+      badge: 'Rentals',
+      title: 'Book a motorcycle rental.',
+      renterName: 'Renter name',
+      renterPhone: 'Phone number',
+      startDate: 'Start date',
+      endDate: 'End date',
+      pickupTime: 'Pickup time',
+      returnTime: 'Return time',
+      selectBike: 'Select a bike',
+      messageLabel: 'Rental details',
+      sendWhatsapp: 'Send rental via WhatsApp',
+      emailSubject: 'RideKey rental request'
+    },
     footer: {
-      title: 'Riveline Motorcycles',
+      title: 'RideKey Motorcycles',
       copy: 'Imtura n ufran, tten ssen, d taltayt n umrag.',
       company: 'Taddart',
       follow: 'Ḥeqq',
-      rights: '© 2026 Riveline. Iɣawanen akk ttwazen.',
+      rights: '© 2026 RideKey. Iɣawanen akk ttwazen.',
       links: ['Aselkim', 'Aɛlam', 'Ttawsi', 'Aɣmis', 'Ttekci']
     }
   },
@@ -1003,12 +1294,14 @@ export const translations = {
       motorcycles: 'Imtura',
       about: 'Fella-nneɣ',
       blog: 'Ablug',
-      contact: 'Nniy'
+      contact: 'Nniy',
+      rides: 'Rides',
+      rentals: 'Rentals',
     },
     common: {
       featured: 'Yettwafren',
       categories: 'Tiskrin',
-      why: 'Acu i Riveline',
+      why: 'Acu i RideKey',
       journal: 'Aɣmis',
       partners: 'Imdukal',
       newsletter: 'Aɣmis',
@@ -1020,10 +1313,31 @@ export const translations = {
       total: 'Asemmi',
       select: 'Fren',
       email: 'Imayl',
-      subscribe: 'Areg'
+      subscribe: 'Areg',
+      rides: 'Rides',
+      price: 'Price',
+      start: 'Start',
+      end: 'End'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      manualLabel: 'Manual option',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      codTitle: 'Cash on Delivery',
+      codBody:
+        'Pay in cash when your motorcycle or accessories are delivered. Our team will confirm availability and delivery details before dispatch.',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
-      heroBadge: 'Riveline Studio',
+      heroBadge: 'RideKey Studio',
       heroTitle1: 'Ttqis d Tazrawt',
       heroSub1: 'Imtura iɣribanen i tɣaṛa n tikkelt.',
       heroTitle2: 'Touring iḍris',
@@ -1035,10 +1349,17 @@ export const translations = {
       featuredTitle: 'Timenẓiyin i yal aɣaras.',
       viewAll: 'Wali akk',
       categoriesTitle: 'Fren tislit n uslal.',
-      whyTitle: 'Aksum iɣ i remtan.',
-      journalTitle: 'Aneɣṛi n studio.',
+      ridesTitle: 'Signature RideKey experiences',
+      ridesHeroBadge: 'RideKey Morocco',
+      ridesHeroTitle: 'Signature rides crafted for Morocco',
+      ridesHeroCopy: 'Adventure-first routes with local guides, premium bikes, and scenic timing built for the Atlas, desert, and coast.',
+      ridesCarouselBadge: 'Carousel',
+      ridesCarouselTitle: 'Upcoming RideKey experiences',
+      ridesCardLabel: 'Ride',
+      whyTitle: 'Built by Riders. Proven in Morocco.',
+      journalTitle: 'The latest news and adventures from RideKey in Morocco.',
       rideFilmsTitle: 'Tadut n studio.',
-      rideFilmsNote: 'Yettwakem iɣ trusan Riveline.',
+      rideFilmsNote: 'Yettwakem iɣ trusan RideKey.',
       partnersTitle: 'Timarka yettwaselken.',
       newsletterTitle: 'Aruɣ tura.',
       newsletterCopy: 'Timenẓiyin, tɣerbin, d yisniwen.',
@@ -1051,19 +1372,18 @@ export const translations = {
       categoryElectricCount: '8 timsemmarin',
       categoryTouring: 'Touring',
       categoryTouringCount: '14 timsemmarin',
-      reason1Title: 'Tazrawt yettwasem',
-      reason1Text: 'Nefren kan timenẓiyin n tazrawt.',
-      reason2Title: 'Imrugan yettwasmaren',
-      reason2Text: 'Imdawa n tazrart i yal aɣaras.',
-      reason3Title: 'Ttgerbin n uḍris',
-      reason3Text: 'Ttgerbin n ufran ɣef usnif.',
-      reason4Title: 'Asenqed n tazrawt',
-      reason4Text: 'Seg usekki ɣer uzem, nelli ntewwi.'
-      ,
+      reason1Title: 'Adventure-Driven Selection',
+      reason1Text: 'Only trail-tested motorcycles, prepared for the Atlas Mountains, the desert, and the coast.',
+      reason2Title: 'Local Ride Experts',
+      reason2Text: 'Moroccan riders who know the roads, weather, and terrain from real experience.',
+      reason3Title: 'Latest Motorcycles of 2026',
+      reason3Text: 'We offer the newest 2026 motorcycle models, equipped with the latest technology and ready for adventure across Morocco.',
+      reason4Title: 'Premium, Hassle-Free Rentals',
+      reason4Text: 'From bike setup to delivery, we handle every detail from start to finish.',
       testimonial1Name: 'Elena Park',
       testimonial1Role: 'Amrag n touring',
       testimonial1Quote:
-        'Riveline tesselm ttuɣal n useɣlal. Aseggwas d tten yufran.',
+        'RideKey tesselm ttuɣal n useɣlal. Aseggwas d tten yufran.',
       testimonial2Name: 'Mateo Silva',
       testimonial2Role: 'Amrag n tɣar',
       testimonial2Quote:
@@ -1071,8 +1391,7 @@ export const translations = {
       testimonial3Name: 'Nina Hassan',
       testimonial3Role: 'Amrag n taddart',
       testimonial3Quote:
-        'Seg tgerbit ɣer uzem, kulši yella yufran d amḍan.'
-      ,
+        'Seg tgerbit ɣer uzem, kulši yella yufran d amḍan.',
       rideFilm1Title: 'Ttgerbit n Studio',
       rideFilm2Title: 'Sprint n Ugmma'
     },
@@ -1086,6 +1405,8 @@ export const translations = {
       whatsappTitle: 'Sifed afran-inek.',
       whatsappNote: 'Asemmi d awal n tazwart (azemz n wudem).',
       sendWhatsapp: 'Sifed s WhatsApp',
+      sendEmail: 'Sifed s Email',
+      emailSubject: 'Asuter n RideKey',
       clear: 'Sfeḍ afran',
       selectPrompt:
         'Fren imtura d uṭṭil, sakin sifed talɣa s WhatsApp ddaw.',
@@ -1123,7 +1444,7 @@ export const translations = {
     about: {
       title: 'Studio i imrugan n tura.',
       copy:
-        'Riveline yessusm d tasnakt n tazrawt. Nessizdi studio ad yili yal mtur yufit i umrag.',
+        'RideKey yessusm d tasnakt n tazrawt. Nessizdi studio ad yili yal mtur yufit i umrag.',
       buildTitle: 'Timenẓiyin',
       buildCopy: 'Yisniwen imeẓyanen d iggan.',
       trustTitle: 'Imdukal yettwaselken',
@@ -1133,6 +1454,8 @@ export const translations = {
     contact: {
       title: 'Nselkem tura i uslal-inek.',
       sendWhatsapp: 'Sifed s WhatsApp',
+      sendEmail: 'Sifed s Email',
+      emailSubject: 'Asuter n tɣerbit RideKey',
       namePlaceholder: 'Isem ummid',
       emailPlaceholder: 'Imayl',
       modelPlaceholder: 'Amodel i tferneḍ',
@@ -1148,12 +1471,26 @@ export const translations = {
       showroomTitle: 'Aksum',
       contactTitle: 'Nniy'
     },
+    rentals: {
+      badge: 'Rentals',
+      title: 'Book a motorcycle rental.',
+      renterName: 'Renter name',
+      renterPhone: 'Phone number',
+      startDate: 'Start date',
+      endDate: 'End date',
+      pickupTime: 'Pickup time',
+      returnTime: 'Return time',
+      selectBike: 'Select a bike',
+      messageLabel: 'Rental details',
+      sendWhatsapp: 'Send rental via WhatsApp',
+      emailSubject: 'RideKey rental request'
+    },
     footer: {
-      title: 'Riveline Motorcycles',
+      title: 'RideKey Motorcycles',
       copy: 'Imtura n ufran, tten ssen, d taltayt n umrag.',
       company: 'Taddart',
       follow: 'Ḥeqq',
-      rights: '© 2026 Riveline. Iɣawanen akk ttwazen.',
+      rights: '© 2026 RideKey. Iɣawanen akk ttwazen.',
       links: ['Aselkim', 'Aɛlam', 'Ttawsi', 'Aɣmis', 'Ttekci']
     }
   },
@@ -1163,12 +1500,14 @@ export const translations = {
       motorcycles: 'Imtura',
       about: 'Fella-nneɣ',
       blog: 'Ablug',
-      contact: 'Nniy'
+      contact: 'Nniy',
+      rides: 'Rides',
+      rentals: 'Rentals',
     },
     common: {
       featured: 'Yettwafren',
       categories: 'Tiskrin',
-      why: 'Acu i Riveline',
+      why: 'Acu i RideKey',
       journal: 'Aɣmis',
       partners: 'Imdukal',
       newsletter: 'Aɣmis',
@@ -1180,10 +1519,31 @@ export const translations = {
       total: 'Asemmi',
       select: 'Fren',
       email: 'Imayl',
-      subscribe: 'Areg'
+      subscribe: 'Areg',
+      rides: 'Rides',
+      price: 'Price',
+      start: 'Start',
+      end: 'End'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      manualLabel: 'Manual option',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      codTitle: 'Cash on Delivery',
+      codBody:
+        'Pay in cash when your motorcycle or accessories are delivered. Our team will confirm availability and delivery details before dispatch.',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
-      heroBadge: 'Riveline Studio',
+      heroBadge: 'RideKey Studio',
       heroTitle1: 'Ttqis d Tazrawt',
       heroSub1: 'Imtura iɣribanen i tɣaṛa n tikkelt.',
       heroTitle2: 'Touring iḍris',
@@ -1195,10 +1555,17 @@ export const translations = {
       featuredTitle: 'Timenẓiyin i yal aɣaras.',
       viewAll: 'Wali akk',
       categoriesTitle: 'Fren tislit n uslal.',
-      whyTitle: 'Aksum iɣ i remtan.',
-      journalTitle: 'Aneɣṛi n studio.',
+      ridesTitle: 'Signature RideKey experiences',
+      ridesHeroBadge: 'RideKey Morocco',
+      ridesHeroTitle: 'Signature rides crafted for Morocco',
+      ridesHeroCopy: 'Adventure-first routes with local guides, premium bikes, and scenic timing built for the Atlas, desert, and coast.',
+      ridesCarouselBadge: 'Carousel',
+      ridesCarouselTitle: 'Upcoming RideKey experiences',
+      ridesCardLabel: 'Ride',
+      whyTitle: 'Built by Riders. Proven in Morocco.',
+      journalTitle: 'The latest news and adventures from RideKey in Morocco.',
       rideFilmsTitle: 'Tadut n studio.',
-      rideFilmsNote: 'Yettwakem iɣ trusan Riveline.',
+      rideFilmsNote: 'Yettwakem iɣ trusan RideKey.',
       partnersTitle: 'Timarka yettwaselken.',
       newsletterTitle: 'Aruɣ tura.',
       newsletterCopy: 'Timenẓiyin, tɣerbin, d yisniwen.',
@@ -1211,19 +1578,18 @@ export const translations = {
       categoryElectricCount: '8 timsemmarin',
       categoryTouring: 'Touring',
       categoryTouringCount: '14 timsemmarin',
-      reason1Title: 'Tazrawt yettwasem',
-      reason1Text: 'Nefren kan timenẓiyin n tazrawt.',
-      reason2Title: 'Imrugan yettwasmaren',
-      reason2Text: 'Imdawa n tazrart i yal aɣaras.',
-      reason3Title: 'Ttgerbin n uḍris',
-      reason3Text: 'Ttgerbin n ufran ɣef usnif.',
-      reason4Title: 'Asenqed n tazrawt',
-      reason4Text: 'Seg usekki ɣer uzem, nelli ntewwi.'
-      ,
+      reason1Title: 'Adventure-Driven Selection',
+      reason1Text: 'Only trail-tested motorcycles, prepared for the Atlas Mountains, the desert, and the coast.',
+      reason2Title: 'Local Ride Experts',
+      reason2Text: 'Moroccan riders who know the roads, weather, and terrain from real experience.',
+      reason3Title: 'Latest Motorcycles of 2026',
+      reason3Text: 'We offer the newest 2026 motorcycle models, equipped with the latest technology and ready for adventure across Morocco.',
+      reason4Title: 'Premium, Hassle-Free Rentals',
+      reason4Text: 'From bike setup to delivery, we handle every detail from start to finish.',
       testimonial1Name: 'Elena Park',
       testimonial1Role: 'Amrag n touring',
       testimonial1Quote:
-        'Riveline tesselm ttuɣal n useɣlal. Aseggwas d tten yufran.',
+        'RideKey tesselm ttuɣal n useɣlal. Aseggwas d tten yufran.',
       testimonial2Name: 'Mateo Silva',
       testimonial2Role: 'Amrag n tɣar',
       testimonial2Quote:
@@ -1231,8 +1597,7 @@ export const translations = {
       testimonial3Name: 'Nina Hassan',
       testimonial3Role: 'Amrag n taddart',
       testimonial3Quote:
-        'Seg tgerbit ɣer uzem, kulši yella yufran d amḍan.'
-      ,
+        'Seg tgerbit ɣer uzem, kulši yella yufran d amḍan.',
       rideFilm1Title: 'Ttgerbit n Studio',
       rideFilm2Title: 'Sprint n Ugmma'
     },
@@ -1246,6 +1611,8 @@ export const translations = {
       whatsappTitle: 'Sifed afran-inek.',
       whatsappNote: 'Asemmi d awal n tazwart (azemz n wudem).',
       sendWhatsapp: 'Sifed s WhatsApp',
+      sendEmail: 'Sifed s Email',
+      emailSubject: 'Asuter n RideKey',
       clear: 'Sfeḍ afran',
       messageIntro: 'Azul! Bɣiɣ ad selsen:',
       messageMotorcycles: 'Imtura:',
@@ -1281,7 +1648,7 @@ export const translations = {
     about: {
       title: 'Studio i imrugan n tura.',
       copy:
-        'Riveline yessusm d tasnakt n tazrawt. Nessizdi studio ad yili yal mtur yufit i umrag.',
+        'RideKey yessusm d tasnakt n tazrawt. Nessizdi studio ad yili yal mtur yufit i umrag.',
       buildTitle: 'Timenẓiyin',
       buildCopy: 'Yisniwen imeẓyanen d iggan.',
       trustTitle: 'Imdukal yettwaselken',
@@ -1291,6 +1658,8 @@ export const translations = {
     contact: {
       title: 'Nselkem tura i uslal-inek.',
       sendWhatsapp: 'Sifed s WhatsApp',
+      sendEmail: 'Sifed s Email',
+      emailSubject: 'Asuter n tɣerbit RideKey',
       namePlaceholder: 'Isem ummid',
       emailPlaceholder: 'Imayl',
       modelPlaceholder: 'Amodel i tferneḍ',
@@ -1301,12 +1670,26 @@ export const translations = {
       showroomTitle: 'Aksum',
       contactTitle: 'Nniy'
     },
+    rentals: {
+      badge: 'Rentals',
+      title: 'Book a motorcycle rental.',
+      renterName: 'Renter name',
+      renterPhone: 'Phone number',
+      startDate: 'Start date',
+      endDate: 'End date',
+      pickupTime: 'Pickup time',
+      returnTime: 'Return time',
+      selectBike: 'Select a bike',
+      messageLabel: 'Rental details',
+      sendWhatsapp: 'Send rental via WhatsApp',
+      emailSubject: 'RideKey rental request'
+    },
     footer: {
-      title: 'Riveline Motorcycles',
+      title: 'RideKey Motorcycles',
       copy: 'Imtura n ufran, tten ssen, d taltayt n umrag.',
       company: 'Taddart',
       follow: 'Ḥeqq',
-      rights: '© 2026 Riveline. Iɣawanen akk ttwazen.',
+      rights: '© 2026 RideKey. Iɣawanen akk ttwazen.',
       links: ['Aselkim', 'Aɛlam', 'Ttawsi', 'Aɣmis', 'Ttekci']
     }
   },
@@ -1316,7 +1699,9 @@ export const translations = {
       motorcycles: 'المواتر',
       about: 'من حنا',
       blog: 'المدونة',
-      contact: 'تواصل'
+      contact: 'تواصل',
+      rides: 'الرحلات',
+      rentals: 'التأجير',
     },
     common: {
       featured: 'مختارة',
@@ -1333,7 +1718,28 @@ export const translations = {
       total: 'المجموع',
       select: 'اختيار',
       email: 'الإيميل',
-      subscribe: 'سجل'
+      subscribe: 'سجل',
+      rides: 'الرحلات',
+      price: 'السعر',
+      start: 'البدء',
+      end: 'النهاية'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      manualLabel: 'Manual option',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      codTitle: 'Cash on Delivery',
+      codBody:
+        'Pay in cash when your motorcycle or accessories are delivered. Our team will confirm availability and delivery details before dispatch.',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
       heroBadge: 'استوديو ريفلاين',
@@ -1348,8 +1754,15 @@ export const translations = {
       featuredTitle: 'نماذج لكل ستايل.',
       viewAll: 'شوف الكل',
       categoriesTitle: 'اختار ستايلك.',
-      whyTitle: 'شوروم للراكب.',
-      journalTitle: 'آخر أخبار الاستوديو.',
+      ridesTitle: 'تجارب RideKey المميزة',
+      ridesHeroBadge: 'RideKey المغرب',
+      ridesHeroTitle: 'رحلات مميزة صُممت للمغرب',
+      ridesHeroCopy: 'مسارات تركز على المغامرة مع مرشدين محليين ودراجات فاخرة وتوقيت مثالي للأطلس والصحراء والساحل.',
+      ridesCarouselBadge: 'كاروسيل',
+      ridesCarouselTitle: 'تجارب RideKey القادمة',
+      ridesCardLabel: 'رحلة',
+      whyTitle: 'مبني بأيدي راكبين. مُجرَّب في المغرب.',
+      journalTitle: 'آخر الأخبار والمغامرات من RideKey في المغرب.',
       rideFilmsTitle: 'حركة من الاستوديو.',
       rideFilmsNote: 'مصور في مسارات ريفلاين.',
       partnersTitle: 'ماركات كنثقو فيها.',
@@ -1364,15 +1777,14 @@ export const translations = {
       categoryElectricCount: '8 نماذج',
       categoryTouring: 'تورينغ',
       categoryTouringCount: '14 نماذج',
-      reason1Title: 'أداء مختار',
-      reason1Text: 'نختارو النسخ الرائدة بتعديل ريفلاين.',
-      reason2Title: 'خبراء معتمدين',
-      reason2Text: 'متخصصين مدربين لكل راكب.',
-      reason3Title: 'تجارب خاصة',
-      reason3Text: 'سيصيونات تجريبية خاصة.',
-      reason4Title: 'خدمة كونسيرج',
-      reason4Text: 'من التخصيص حتى للتسليم كنتهلاو فالتفاصيل.'
-      ,
+      reason1Title: 'اختيار مدفوع بالمغامرة',
+      reason1Text: 'فقط دراجات مجرّبة على المسارات، مُجهزة للأطلس والصحراء والساحل.',
+      reason2Title: 'خبراء ركوب محليون',
+      reason2Text: 'راكبون مغاربة يعرفون الطرق والطقس والتضاريس من خبرة فعلية.',
+      reason3Title: 'أحدث دراجات 2026',
+      reason3Text: 'نوفر أحدث موديلات 2026 بتقنيات متقدمة وجاهزة للمغامرة عبر المغرب.',
+      reason4Title: 'تأجير فاخر بلا عناء',
+      reason4Text: 'من تجهيز الدراجة إلى التسليم، نتولى كل التفاصيل من البداية للنهاية.',
       testimonial1Name: 'إيلينا بارك',
       testimonial1Role: 'راكبة ديال الرحلات',
       testimonial1Quote:
@@ -1384,8 +1796,7 @@ export const translations = {
       testimonial3Name: 'نينا حسن',
       testimonial3Role: 'تنقل حضري',
       testimonial3Quote:
-        'من أول تجربة حتى للتسليم، كلشي كان راقي وشخصي.'
-      ,
+        'من أول تجربة حتى للتسليم، كلشي كان راقي وشخصي.',
       rideFilm1Title: 'تجربة فالستوديو',
       rideFilm2Title: 'سباق الساحل'
     },
@@ -1399,6 +1810,8 @@ export const translations = {
       whatsappTitle: 'صيفط الاختيار.',
       whatsappNote: 'المجموع حسب الثمن المعروض (الأقل).',
       sendWhatsapp: 'صيفط واتساب',
+      sendEmail: 'صيفط الإيميل',
+      emailSubject: 'طلب ريفلاين',
       clear: 'مسح',
       selectPrompt:
         'اختار المواتر والإكسسوارات ومن بعد صيفط الطلب فواتساب لتحت.',
@@ -1446,6 +1859,8 @@ export const translations = {
     contact: {
       title: 'نخططو للرحلة الجاية.',
       sendWhatsapp: 'صيفط واتساب',
+      sendEmail: 'صيفط الإيميل',
+      emailSubject: 'طلب تجربة ريفلاين',
       namePlaceholder: 'السمية كاملة',
       emailPlaceholder: 'الإيميل',
       modelPlaceholder: 'الموديل المفضل',
@@ -1460,6 +1875,20 @@ export const translations = {
       hoursWeekend: 'الأحد · بالمواعيد فقط',
       showroomTitle: 'الشوروم',
       contactTitle: 'تواصل'
+    },
+    rentals: {
+      badge: 'التأجير',
+      title: 'احجز تأجير دراجة نارية.',
+      renterName: 'اسم المستأجر',
+      renterPhone: 'رقم الهاتف',
+      startDate: 'تاريخ البدء',
+      endDate: 'تاريخ الانتهاء',
+      pickupTime: 'وقت الاستلام',
+      returnTime: 'وقت الإرجاع',
+      selectBike: 'اختر دراجة',
+      messageLabel: 'تفاصيل التأجير',
+      sendWhatsapp: 'أرسل التأجير عبر واتساب',
+      emailSubject: 'طلب تأجير RideKey'
     },
     footer: {
       title: 'ريفلاين',
@@ -1476,7 +1905,8 @@ export const translations = {
       motorcycles: 'الدراجات',
       about: 'من نحن',
       blog: 'المدونة',
-      contact: 'تواصل'
+      contact: 'تواصل',
+      rentals: 'التأجير'
     },
     common: {
       featured: 'المختارة',
@@ -1493,7 +1923,25 @@ export const translations = {
       total: 'الإجمالي',
       select: 'اختيار',
       email: 'البريد الإلكتروني',
-      subscribe: 'اشتراك'
+      subscribe: 'اشتراك',
+      language: 'اللغة',
+      rides: 'الرحلات',
+      price: 'السعر',
+      start: 'البدء',
+      end: 'النهاية'
+    },
+    payments: {
+      badge: 'Payments',
+      title: 'Moroccan Payment Methods',
+      noticeTitle: 'Security Notice',
+      noticeBody:
+        'For your safety, all payment methods redirect you to their official provider websites. We do not process payments directly on this website. Please copy our official account information and complete your transaction only through the trusted payment provider of your choice.',
+      officialSite: 'Official website',
+      merchantLabel: 'Merchant name',
+      ribLabel: 'RIB / Account number',
+      walletLabel: 'Wallet number',
+      copy: 'Copy',
+      copied: 'Copied ✓'
     },
     home: {
       heroBadge: 'استوديو ريفلاين',
@@ -1508,8 +1956,8 @@ export const translations = {
       featuredTitle: 'طرازات مميزة لكل أسلوب.',
       viewAll: 'عرض الكل',
       categoriesTitle: 'اختر أسلوب قيادتك.',
-      whyTitle: 'معرض مُعدّ للراكب.',
-      journalTitle: 'آخر ما في الاستوديو.',
+      whyTitle: 'مبني بأيدي راكبين. مُجرَّب في المغرب.',
+      journalTitle: 'آخر الأخبار والمغامرات من RideKey في المغرب.',
       rideFilmsTitle: 'حركة من قلب الاستوديو.',
       rideFilmsNote: 'مصورة على مسارات ريفلاين.',
       partnersTitle: 'علامات موثوقة.',
@@ -1524,15 +1972,14 @@ export const translations = {
       categoryElectricCount: '8 نماذج',
       categoryTouring: 'رحلات',
       categoryTouringCount: '14 نموذجاً',
-      reason1Title: 'أداء مُنتقى',
-      reason1Text: 'نختار الفئات الرائدة بضبط ريفلاين الحصري.',
-      reason2Title: 'خبراء معتمدون',
-      reason2Text: 'مختصون مدربون لدى المصنع لكل رحلة.',
-      reason3Title: 'تجارب خاصة',
-      reason3Text: 'جلسات تجريبية خاصة على مساراتنا.',
-      reason4Title: 'دعم كونسيرج',
-      reason4Text: 'من التخصيص إلى التسليم، نحن نهتم بالتفاصيل.'
-      ,
+      reason1Title: 'اختيار مدفوع بالمغامرة',
+      reason1Text: 'فقط دراجات مجرّبة على المسارات، مُجهزة للأطلس والصحراء والساحل.',
+      reason2Title: 'خبراء ركوب محليون',
+      reason2Text: 'راكبون مغاربة يعرفون الطرق والطقس والتضاريس من خبرة فعلية.',
+      reason3Title: 'أحدث دراجات 2026',
+      reason3Text: 'نوفر أحدث موديلات 2026 بتقنيات متقدمة وجاهزة للمغامرة عبر المغرب.',
+      reason4Title: 'تأجير فاخر بلا عناء',
+      reason4Text: 'من تجهيز الدراجة إلى التسليم، نتولى كل التفاصيل من البداية للنهاية.',
       testimonial1Name: 'إيلينا بارك',
       testimonial1Role: 'راكبة رحلات',
       testimonial1Quote:
@@ -1544,8 +1991,7 @@ export const translations = {
       testimonial3Name: 'نينا حسن',
       testimonial3Role: 'تنقل حضري',
       testimonial3Quote:
-        'من أول تجربة حتى التسليم، كل شيء كان راقياً وشخصياً. أفضل تجربة معرض.'
-      ,
+        'من أول تجربة حتى التسليم، كل شيء كان راقياً وشخصياً. أفضل تجربة معرض.',
       rideFilm1Title: 'تجربة الاستوديو',
       rideFilm2Title: 'سباق الساحل'
     },
@@ -1559,6 +2005,8 @@ export const translations = {
       whatsappTitle: 'أرسل اختيارك.',
       whatsappNote: 'الإجمالي يعتمد على السعر المعروض (الأدنى ضمن النطاق).',
       sendWhatsapp: 'إرسال عبر واتساب',
+      sendEmail: 'إرسال عبر البريد الإلكتروني',
+      emailSubject: 'طلب ريفلاين',
       clear: 'مسح الاختيار',
       selectPrompt:
         'اختر الدراجات والإكسسوارات، ثم استخدم طلب واتساب أدناه لإرسال طلبك.',
@@ -1606,6 +2054,8 @@ export const translations = {
     contact: {
       title: 'لنخطط لرحلتك القادمة.',
       sendWhatsapp: 'إرسال عبر واتساب',
+      sendEmail: 'إرسال عبر البريد الإلكتروني',
+      emailSubject: 'طلب تجربة ريفلاين',
       namePlaceholder: 'الاسم الكامل',
       emailPlaceholder: 'البريد الإلكتروني',
       modelPlaceholder: 'الموديل المفضل',
@@ -1632,6 +2082,22 @@ export const translations = {
   }
 }
 
-export const getTranslations = (lang) => translations[lang] || translations.en
+// Merge localized keys onto English defaults to avoid missing-string crashes.
+const deepMerge = (base, override) => {
+  if (Array.isArray(base)) return override ?? base
+  if (typeof base !== 'object' || base === null) {
+    return override ?? base
+  }
+  const result = { ...base }
+  if (override && typeof override === 'object') {
+    Object.keys(override).forEach((key) => {
+      result[key] = deepMerge(base[key], override[key])
+    })
+  }
+  return result
+}
+
+export const getTranslations = (lang) =>
+  deepMerge(translations.en, translations[lang] || {})
 
 export const getDirection = (lang) => (rtlLanguages.has(lang) ? 'rtl' : 'ltr')

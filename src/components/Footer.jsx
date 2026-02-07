@@ -1,5 +1,6 @@
 import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react'
 import { useI18n } from '../i18nContext'
+// Component: Footer
 
 export default function Footer() {
   const { t } = useI18n()

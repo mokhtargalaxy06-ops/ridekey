@@ -1,5 +1,6 @@
 import { ShieldCheck, Sparkles } from 'lucide-react'
 import { useI18n } from '../i18nContext'
+// Page: About
 
 export default function About() {
   const { t } = useI18n()

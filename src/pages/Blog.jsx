@@ -1,5 +1,6 @@
 import { blogs } from '../data/blogs'
 import { useI18n } from '../i18nContext'
+// Page: Blog
 
 export default function Blog() {
   const { t } = useI18n()

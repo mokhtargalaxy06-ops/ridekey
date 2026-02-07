@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { useI18n } from "../i18nContext";
+// Page: Contact
 
-export default function Contact() {
+export default function Contact({ embedded = false }) {
   const { t } = useI18n();
   const [form, setForm] = useState({
     name: "",
@@ -11,25 +12,41 @@ export default function Contact() {
   });
 
   const whatsappNumber = "212608188138";
-  const whatsappUrl = useMemo(() => {
+  const emailAddress = "hello@riveline.studio";
+
+  const messageLines = useMemo(() => {
     const intro = t.contact.messageIntro || "Hi! I want to book a test ride.";
     const nameLabel = t.contact.nameLabel || "Name";
     const emailLabel = t.contact.emailLabel || "Email";
     const modelLabel = t.contact.modelLabel || "Preferred model";
     const messageLabel = t.contact.messageLabel || "Message";
-    const lines = [
+    return [
       intro,
       `${nameLabel}: ${form.name || "-"}`,
       `${emailLabel}: ${form.email || "-"}`,
       `${modelLabel}: ${form.model || "-"}`,
       `${messageLabel}: ${form.message || "-"}`,
     ];
-    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;
   }, [form, t]);
+
+  const whatsappUrl = useMemo(() => {
+    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(messageLines.join("\n"))}`;
+  }, [messageLines, whatsappNumber]);
+
+  const emailUrl = useMemo(() => {
+    const subject = t.contact.emailSubject || "RideKey test ride request";
+    return `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(messageLines.join("\n"))}`;
+  }, [emailAddress, messageLines, t]);
   return (
-    <div className="mx-auto max-w-5xl px-6 pb-24 pt-28">
+    <div
+      className={
+        embedded
+          ? "mx-auto max-w-5xl px-6"
+          : "mx-auto max-w-5xl px-6 pb-24 pt-28"
+      }
+    >
       <p className="section-subtitle">{t.nav.contact}</p>
-      <h1 className="section-title mt-3">{t.contact.title}</h1>
+      <h2 className="section-title mt-3">{t.contact.title}</h2>
       <div className="mt-10 grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
         <form
           className="rounded-3xl border border-white/10 bg-night p-8"
@@ -73,12 +90,20 @@ export default function Contact() {
               }
             />
           </div>
-          <button
-            type="submit"
-            className="mt-6 inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white"
-          >
-            {t.contact.sendWhatsapp}
-          </button>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <button
+              type="submit"
+              className="inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white"
+            >
+              {t.contact.sendWhatsapp}
+            </button>
+            <a
+              href={emailUrl}
+              className="inline-flex items-center justify-center rounded-full bg-slate-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-500"
+            >
+              {t.contact.sendEmail}
+            </a>
+          </div>
         </form>
         <div className="rounded-3xl border border-white/10 bg-night p-8 text-sm text-slate-300">
           <h3 className="text-lg font-semibold text-white">
@@ -88,7 +113,7 @@ export default function Contact() {
           <p className="mt-2">{t.contact.hoursWeekend}</p>
           <div className="mt-6">
             <h4 className="text-white">{t.contact.showroomTitle}</h4>
-            <p className="mt-2">415 Riveline Avenue</p>
+            <p className="mt-2">415 RideKey Avenue</p>
             <p>San Francisco, CA 94107</p>
           </div>
           <div className="mt-6">

@@ -7,7 +7,8 @@ export const gearItems = [
     price: 'MAD 47.90 – 55.40',
     priceValue: 47.9,
     image:
-      'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&fm=jpg&q=80&w=1200',
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Raincoat.jpg',
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Raincoat.jpg',
     cta: 'Read more'
   },
   {
@@ -18,7 +19,8 @@ export const gearItems = [
     price: 'MAD 60.00 (was 72.00)',
     priceValue: 60,
     image:
-      'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&fm=jpg&q=80&w=1200',
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Motorcycle_helmet.jpg',
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Motorcycle_helmet.jpg',
     cta: 'Buy Now'
   },
   {
@@ -29,7 +31,8 @@ export const gearItems = [
     price: 'MAD 59.90',
     priceValue: 59.9,
     image:
-      'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&fm=jpg&q=80&w=1200',
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Knee_pad.png',
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Knee_pad.png',
     cta: 'Add to cart'
   },
   {
@@ -40,7 +43,8 @@ export const gearItems = [
     price: 'MAD 64.80',
     priceValue: 64.8,
     image:
-      'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&fm=jpg&q=80&w=1200',
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Backpack-1.jpg',
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Backpack-1.jpg',
     cta: 'Add to cart'
   },
   {
@@ -51,7 +55,8 @@ export const gearItems = [
     price: 'MAD 29.00 – 37.00',
     priceValue: 29,
     image:
-      'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&fm=jpg&q=80&w=1200',
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Motocross_boot.jpeg',
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Motocross_boot.jpeg',
     cta: 'View products'
   },
   {
@@ -62,7 +67,8 @@ export const gearItems = [
     price: 'MAD 37.00 – 45.00',
     priceValue: 37,
     image:
-      'https://images.unsplash.com/photo-1517654443271-7a1ab4ff2b42?auto=format&fit=crop&fm=jpg&q=80&w=1200',
+      'https://commons.wikimedia.org/wiki/Special:FilePath/MotorcycleRacingGlove.jpg',
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/MotorcycleRacingGlove.jpg',
     cta: 'View products'
   },
   {
@@ -73,7 +79,8 @@ export const gearItems = [
     price: 'MAD 75.00',
     priceValue: 75,
     image:
-      'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&fm=jpg&q=80&w=1200',
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Metal_Motorcycle_Gloves.jpg',
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Metal_Motorcycle_Gloves.jpg',
     cta: 'Add to cart'
   },
   {
@@ -84,7 +91,8 @@ export const gearItems = [
     price: 'MAD 68.00',
     priceValue: 68,
     image:
-      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&fm=jpg&q=80&w=1200',
+      'https://commons.wikimedia.org/wiki/Special:FilePath/Motorcycle_racing_boot.jpeg',
+    url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Motorcycle_racing_boot.jpeg',
     cta: 'Add to cart'
   }
 ]

@@ -1,5 +1,6 @@
 import { ArrowUp } from 'lucide-react'
 import { useEffect, useState } from 'react'
+// Component: ScrollUpButton
 
 export default function ScrollUpButton() {
   const [visible, setVisible] = useState(false)

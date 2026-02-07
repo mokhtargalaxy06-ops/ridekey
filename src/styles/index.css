@@ -6,6 +6,14 @@
   font-family: "Outfit", "Helvetica Neue", Arial, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+:target {
+  scroll-margin-top: 7rem;
+}
+
 body {
   @apply bg-ink text-frost;
 }
@@ -26,4 +34,14 @@ button:focus-visible,
 a:focus-visible {
   outline: 2px solid #ff3b3f;
   outline-offset: 2px;
+}
+
+[dir="rtl"] .section-title,
+[dir="rtl"] .section-subtitle {
+  text-align: right;
+}
+
+[dir="rtl"] .section-subtitle {
+  letter-spacing: 0.08em;
+  text-transform: none;
 }

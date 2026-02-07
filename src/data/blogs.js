@@ -1,26 +1,33 @@
 export const blogs = [
   {
-    id: 'designing-speed',
-    title: 'Designing Speed for the Electric Era',
+    id: 'magazine',
+    title: 'The latest news and adventures from RideKey in Morocco.',
+    date: 'Feb 06, 2026',
+    tag: 'Magazine',
+    excerpt: 'The latest news and adventures from RideKey in Morocco.'
+  },
+  {
+    id: 'speed-driven-design',
+    title: 'Speed-Driven Design in the Motorcycle World',
     date: 'Jan 12, 2026',
     tag: 'Design',
     excerpt:
-      'How aero-centric frames and battery architecture are rewriting the rules of performance.'
+      'How aerodynamic structures and modern battery technologies are rewriting the rules of performance on the Atlas roads, the desert, and the Moroccan coastline.'
   },
   {
-    id: 'touring-essentials',
-    title: 'Touring Essentials for 1,000 Mile Weekends',
+    id: 'long-distance-essentials',
+    title: 'Long-Distance Riding Essentials for Motorcycle Enthusiasts in Morocco',
     date: 'Dec 28, 2025',
-    tag: 'Travel',
+    tag: 'Travel & Adventure',
     excerpt:
-      'Packing strategy, ride modes, and tech that make long-haul trips feel effortless.'
+      'Packing strategies, riding positions, and techniques that make Atlas, desert, and coastal journeys smooth and enjoyable—even over hundreds of kilometers.'
   },
   {
-    id: 'track-tech',
-    title: 'Track Tech: Smart Ride Modes Explained',
+    id: 'smart-riding-tech',
+    title: 'Smart Riding Technologies on Moroccan Roads',
     date: 'Dec 10, 2025',
-    tag: 'Tech',
+    tag: 'Technology & Practice',
     excerpt:
-      'A breakdown of how IMU-driven systems unlock smoother, faster laps.'
+      'An explanation of how IMU systems and advanced riding modes enhance control, smoothness, and riding speed on both off-road and paved terrain.'
   }
 ]

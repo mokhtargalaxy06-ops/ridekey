@@ -1,19 +1,28 @@
-import { createContext, useContext, useMemo } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { detectLanguage, getDirection, getTranslations } from './i18n'
 
 const I18nContext = createContext({
   lang: 'en',
   dir: 'ltr',
-  t: getTranslations('en')
+  t: getTranslations('en'),
+  setLang: () => {}
 })
 
 export const I18nProvider = ({ children }) => {
-  const lang = detectLanguage()
+  // Persist user language preference between sessions.
+  const [lang, setLang] = useState(() => {
+    const stored = localStorage.getItem('riveline-lang')
+    return stored || detectLanguage()
+  })
   const dir = getDirection(lang)
   const t = useMemo(() => getTranslations(lang), [lang])
 
+  useEffect(() => {
+    localStorage.setItem('riveline-lang', lang)
+  }, [lang])
+
   return (
-    <I18nContext.Provider value={{ lang, dir, t }}>
+    <I18nContext.Provider value={{ lang, dir, t, setLang }}>
       {children}
     </I18nContext.Provider>
   )

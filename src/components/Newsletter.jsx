@@ -1,4 +1,5 @@
 import { useI18n } from '../i18nContext'
+// Component: Newsletter
 
 export default function Newsletter() {
   const { t } = useI18n()

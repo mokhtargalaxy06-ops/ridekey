@@ -1,5 +1,6 @@
 import { brands, types } from '../data/bikes'
 import { useI18n } from '../i18nContext'
+// Component: Filters
 
 export default function Filters({ filters, setFilters }) {
   const { t, lang } = useI18n()

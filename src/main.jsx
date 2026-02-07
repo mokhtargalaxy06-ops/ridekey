@@ -8,10 +8,10 @@ import { I18nProvider } from './i18nContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <I18nProvider>
+    <I18nProvider>
+      <BrowserRouter>
         <App />
-      </I18nProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </I18nProvider>
   </React.StrictMode>
 )
