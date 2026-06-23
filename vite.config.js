@@ -3,8 +3,21 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "./", // 👈 THIS FIXES IT
+  base: "/",
+  server: {
+    watch: {
+      usePolling: true,
+      interval: 500,
+      ignored: [
+        "**/backend/vendor/**",
+        "**/backend/storage/**",
+        "**/backend/bootstrap/cache/**",
+        "**/dist/**",
+      ],
+    },
+  },
   build: {
+    target: "es2018",
     cssCodeSplit: true,
     sourcemap: false,
     rollupOptions: {

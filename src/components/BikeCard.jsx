@@ -26,7 +26,7 @@ export default function BikeCard({ bike, onSelect, selected }) {
         >
           <img
             src={bike.image}
-            alt={bike.name}
+            alt={`${bike.brand} ${bike.name} adventure motorcycle rental in Marrakech Morocco`}
             loading="lazy"
             decoding="async"
             width="1200"

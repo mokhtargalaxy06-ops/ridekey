@@ -1,8 +1,12 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { bikes } from "../data/bikes";
-import { gearItems } from "../data/gear";
+import CalendarInput from "../components/CalendarInput";
+import SEO from "../components/SEO";
+import RentalInclusions from "../components/RentalInclusions";
+import { useCatalog } from "../catalogContext";
 import { useI18n } from "../i18nContext";
+import { usePageSeo } from "../seo/usePageSeo";
+import { formatMadStringWithEuro } from "../utils/formatCurrency";
 // Page: Rentals
 
 const todayIso = () => new Date().toISOString().split("T")[0];
@@ -13,7 +17,9 @@ const addDays = (iso, days) => {
 };
 
 export default function Rentals({ embedded = false }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const { bikes, gear: gearItems } = useCatalog();
+  const seo = usePageSeo("rentals");
   const navigate = useNavigate();
   const [form, setForm] = useState({
     bikeId: bikes[0]?.id ?? "",
@@ -25,6 +31,7 @@ export default function Rentals({ embedded = false }) {
     returnTime: "18:00",
   });
   const [selectedGearIds, setSelectedGearIds] = useState([]);
+  const [copiedEmailText, setCopiedEmailText] = useState(false);
 
   const minEndDate = useMemo(
     () => addDays(form.startDate, 1),
@@ -49,7 +56,7 @@ export default function Rentals({ embedded = false }) {
     navigate(`/bikes?${params.toString()}${gearParam}#whatsapp-checkout`);
   };
 
-  const emailAddress = "hello@riveline.studio";
+  const emailAddress = "ridekey.ma@gmail.com";
   const emailSubject =
     t.rentals.emailSubject || "RideKey rental request";
   const selectedGearNames = selectedGearIds
@@ -73,6 +80,44 @@ export default function Rentals({ embedded = false }) {
   const emailUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(
     emailSubject,
   )}&body=${encodeURIComponent(emailBody)}`;
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+    emailAddress,
+  )}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(
+    emailBody,
+  )}`;
+  const outlookUrl = `https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(
+    emailAddress,
+  )}&subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(
+    emailBody,
+  )}`;
+  const openRentalEmail = () => {
+    window.open(gmailUrl, "_blank", "noreferrer");
+  };
+  const openOutlookEmail = () => {
+    window.open(outlookUrl, "_blank", "noreferrer");
+  };
+  const copyRentalEmailText = async () => {
+    const text = `To: ${emailAddress}\nSubject: ${emailSubject}\n\n${emailBody}`;
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+      setCopiedEmailText(true);
+      window.setTimeout(() => setCopiedEmailText(false), 1600);
+    } catch (error) {
+      console.error("Copy failed", error);
+    }
+  };
 
   return (
     <div
@@ -82,8 +127,25 @@ export default function Rentals({ embedded = false }) {
           : "mx-auto max-w-5xl px-6 pb-24 pt-28"
       }
     >
+      {!embedded && (
+        <SEO
+          {...seo}
+          keywords={[
+            "motorcycle rental Marrakech booking",
+            "motorbike rental Marrakech",
+            "location moto Marrakech",
+          ]}
+        />
+      )}
       <p className="section-subtitle">{t.rentals.badge}</p>
-      <h2 className="section-title mt-3">{t.rentals.title}</h2>
+      {embedded ? (
+        <h2 className="section-title mt-3">{t.rentals.title}</h2>
+      ) : (
+        <h1 className="section-title mt-3">{t.rentals.title}</h1>
+      )}
+      <div className="mt-8">
+        <RentalInclusions />
+      </div>
       <div className="mt-8 grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-3xl border border-white/10 bg-night p-8">
           <div className="grid gap-4 text-sm">
@@ -126,10 +188,8 @@ export default function Rentals({ embedded = false }) {
             <div className="grid gap-4 md:grid-cols-2">
               <label className="text-slate-300">
                 {t.rentals.startDate}
-                <input
-                  type="date"
+                <CalendarInput
                   min={todayIso()}
-                  className="mt-2 w-full rounded-lg border-white/10 bg-ink text-white"
                   value={form.startDate}
                   onChange={(event) =>
                     setForm({ ...form, startDate: event.target.value })
@@ -138,10 +198,8 @@ export default function Rentals({ embedded = false }) {
               </label>
               <label className="text-slate-300">
                 {t.rentals.endDate}
-                <input
-                  type="date"
+                <CalendarInput
                   min={minEndDate}
-                  className="mt-2 w-full rounded-lg border-white/10 bg-ink text-white"
                   value={form.endDate}
                   onChange={(event) =>
                     setForm({ ...form, endDate: event.target.value })
@@ -207,7 +265,9 @@ export default function Rentals({ embedded = false }) {
                         ) : (
                           <span className="text-slate-200">{item.name}</span>
                         )}
-                        <p className="text-xs text-slate-400">{item.price}</p>
+                        <p className="text-xs text-slate-400">
+                          {formatMadStringWithEuro(item.price, lang)}
+                        </p>
                       </div>
                     </div>
                     <input
@@ -234,12 +294,38 @@ export default function Rentals({ embedded = false }) {
               >
                 {t.rentals.sendWhatsapp}
               </button>
-              <a
-                href={emailUrl}
+              <button
+                type="button"
+                onClick={openRentalEmail}
                 className="inline-flex items-center justify-center rounded-full bg-slate-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-500"
               >
                 {t.contact.sendEmail}
-              </a>
+              </button>
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              <button
+                type="button"
+                onClick={openRentalEmail}
+                className="inline-flex items-center justify-center rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white transition hover:border-white/40"
+              >
+                {t.rentalsEmail?.openGmail || "Open in Gmail"}
+              </button>
+              <button
+                type="button"
+                onClick={openOutlookEmail}
+                className="inline-flex items-center justify-center rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white transition hover:border-white/40"
+              >
+                {t.rentalsEmail?.openOutlook || "Open in Outlook"}
+              </button>
+              <button
+                type="button"
+                onClick={copyRentalEmailText}
+                className="inline-flex items-center justify-center rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white transition hover:border-white/40"
+              >
+                {copiedEmailText
+                  ? t.rentalsEmail?.copied || "Copied"
+                  : t.rentalsEmail?.copyText || "Copy email text"}
+              </button>
             </div>
           </div>
         </div>
@@ -247,19 +333,35 @@ export default function Rentals({ embedded = false }) {
           <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
             {t.rentals.messageLabel}
           </p>
-          <div className="mt-4 space-y-2">
+          <div className="mt-4 space-y-3">
             <p>
               {t.rentals.renterName}: {form.name || "-"}
             </p>
             <p>
               {t.rentals.renterPhone}: {form.phone || "-"}
             </p>
-            <p>
-              {t.rentals.startDate}: {form.startDate}
-            </p>
-            <p>
-              {t.rentals.endDate}: {form.endDate}
-            </p>
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="text-slate-300">
+                {t.rentals.startDate}
+                <CalendarInput
+                  min={todayIso()}
+                  value={form.startDate}
+                  onChange={(event) =>
+                    setForm({ ...form, startDate: event.target.value })
+                  }
+                />
+              </label>
+              <label className="text-slate-300">
+                {t.rentals.endDate}
+                <CalendarInput
+                  min={minEndDate}
+                  value={form.endDate}
+                  onChange={(event) =>
+                    setForm({ ...form, endDate: event.target.value })
+                  }
+                />
+              </label>
+            </div>
             <p>
               {t.rentals.pickupTime}: {form.pickupTime}
             </p>
@@ -274,7 +376,7 @@ export default function Rentals({ embedded = false }) {
                 const item = gearItems.find((gear) => gear.id === gearId);
                 return (
                   <p key={gearId}>
-                    • {item ? `${item.name} — ${item.price} / day` : gearId}
+                    • {item ? `${item.name} — ${formatMadStringWithEuro(item.price, lang)} / day` : gearId}
                   </p>
                 );
               })

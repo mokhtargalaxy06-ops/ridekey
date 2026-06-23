@@ -1,11 +1,15 @@
 import { ShieldCheck, Sparkles } from 'lucide-react'
+import SEO from '../components/SEO'
 import { useI18n } from '../i18nContext'
+import { usePageSeo } from '../seo/usePageSeo'
 // Page: About
 
 export default function About() {
   const { t } = useI18n()
+  const seo = usePageSeo('about')
   return (
     <div className="mx-auto max-w-5xl px-6 pb-24 pt-28">
+      <SEO {...seo} />
       <div className="rounded-3xl border border-white/10 bg-night p-10">
         <p className="section-subtitle">{t.nav.about}</p>
         <h1 className="section-title mt-3">{t.about.title}</h1>

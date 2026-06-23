@@ -1,9 +1,13 @@
 import { useMemo, useState } from "react";
+import SEO from "../components/SEO";
 import { useI18n } from "../i18nContext";
+import  GlassMapButton  from "../components/GlassMapButton";
+import { usePageSeo } from "../seo/usePageSeo";
 // Page: Contact
 
 export default function Contact({ embedded = false }) {
   const { t } = useI18n();
+  const seo = usePageSeo("contact");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -12,10 +16,10 @@ export default function Contact({ embedded = false }) {
   });
 
   const whatsappNumber = "212608188138";
-  const emailAddress = "hello@riveline.studio";
+  const emailAddress = "ridekey.ma@gmail.com";
 
   const messageLines = useMemo(() => {
-    const intro = t.contact.messageIntro || "Hi! I want to book a test ride.";
+    const intro = t.contact.messageIntro || "Hi! I want to book a ride.";
     const nameLabel = t.contact.nameLabel || "Name";
     const emailLabel = t.contact.emailLabel || "Email";
     const modelLabel = t.contact.modelLabel || "Preferred model";
@@ -45,8 +49,22 @@ export default function Contact({ embedded = false }) {
           : "mx-auto max-w-5xl px-6 pb-24 pt-28"
       }
     >
+      {!embedded && (
+        <SEO
+          {...seo}
+          keywords={[
+            "contact motorcycle rental Marrakech",
+            "RideKey",
+            "location moto Maroc",
+          ]}
+        />
+      )}
       <p className="section-subtitle">{t.nav.contact}</p>
-      <h2 className="section-title mt-3">{t.contact.title}</h2>
+      {embedded ? (
+        <h2 className="section-title mt-3">{t.contact.title}</h2>
+      ) : (
+        <h1 className="section-title mt-3">{t.contact.title}</h1>
+      )}
       <div className="mt-10 grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
         <form
           className="rounded-3xl border border-white/10 bg-night p-8"
@@ -113,13 +131,17 @@ export default function Contact({ embedded = false }) {
           <p className="mt-2">{t.contact.hoursWeekend}</p>
           <div className="mt-6">
             <h4 className="text-white">{t.contact.showroomTitle}</h4>
-            <p className="mt-2">415 RideKey Avenue</p>
-            <p>San Francisco, CA 94107</p>
+            <p className="mt-2">{t.contact.showroomName}</p>
+            <p>{t.contact.showroomAddress}</p>
           </div>
           <div className="mt-6">
             <h4 className="text-white">{t.contact.contactTitle}</h4>
-            <p className="mt-2">hello@riveline.studio</p>
-            <p>+1 (415) 555-0188</p>
+            <p className="mt-2">{t.contact.emailValue}</p>
+            <p>{t.contact.phoneValue}</p>
+          </div>
+          {/* Google Maps Button */}
+          <div className="mt-4">
+            <GlassMapButton size="md" className="w-fit" />
           </div>
         </div>
       </div>

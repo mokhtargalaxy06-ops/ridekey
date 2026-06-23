@@ -1,15 +1,18 @@
-import { brands, types } from '../data/bikes'
+import { useCatalog } from '../catalogContext'
 import { useI18n } from '../i18nContext'
+import { formatMADOnly } from '../utils/formatCurrency'
 // Component: Filters
 
 export default function Filters({ filters, setFilters }) {
   const { t, lang } = useI18n()
-  const formatNumber = (value) => new Intl.NumberFormat(lang).format(value)
-  const underLabel = t.filters.under15000.replace('15000', formatNumber(15000))
-  const betweenLabel = t.filters.between15000
-    .replace('15000', formatNumber(15000))
-    .replace('20000', formatNumber(20000))
-  const aboveLabel = t.filters.above20000.replace('20000', formatNumber(20000))
+  const { bikeFilters } = useCatalog()
+  const { brands, displacements, priceRanges, types } = bikeFilters
+  const getPriceLabel = (range) => {
+    if (range.key === 'All') return t.filters.all
+    if (range.min === range.max) return formatMADOnly(range.min, lang)
+    return `${formatMADOnly(range.min, lang)} - ${formatMADOnly(range.max, lang)}`
+  }
+
   return (
     <div className="grid gap-4 rounded-2xl border border-white/10 bg-night p-5 text-sm md:grid-cols-5">
       <select
@@ -35,7 +38,7 @@ export default function Filters({ filters, setFilters }) {
         value={filters.engine}
         onChange={(event) => setFilters({ ...filters, engine: event.target.value })}
       >
-        {['All', '0cc', '700cc', '850cc', '998cc', '1200cc', '1250cc'].map((engine) => (
+        {displacements.map((engine) => (
           <option key={engine}>
             {engine === 'All' ? t.filters.all : engine}
           </option>
@@ -46,14 +49,9 @@ export default function Filters({ filters, setFilters }) {
         value={filters.price}
         onChange={(event) => setFilters({ ...filters, price: event.target.value })}
       >
-        {[
-          { key: 'All', label: 'All' },
-          { key: 'Under 15000', label: underLabel },
-          { key: '15000 - 20000', label: betweenLabel },
-          { key: '20000+', label: aboveLabel }
-        ].map((range) => (
+        {priceRanges.map((range) => (
           <option key={range.key} value={range.key}>
-            {range.label}
+            {getPriceLabel(range)}
           </option>
         ))}
       </select>

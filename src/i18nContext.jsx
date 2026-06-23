@@ -11,14 +11,14 @@ const I18nContext = createContext({
 export const I18nProvider = ({ children }) => {
   // Persist user language preference between sessions.
   const [lang, setLang] = useState(() => {
-    const stored = localStorage.getItem('riveline-lang')
+    const stored = localStorage.getItem('Ridekey-lang')
     return stored || detectLanguage()
   })
   const dir = getDirection(lang)
   const t = useMemo(() => getTranslations(lang), [lang])
 
   useEffect(() => {
-    localStorage.setItem('riveline-lang', lang)
+    localStorage.setItem('Ridekey-lang', lang)
   }, [lang])
 
   return (

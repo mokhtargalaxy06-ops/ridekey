@@ -2,11 +2,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import BikeCard from "../components/BikeCard";
+import CalendarInput from "../components/CalendarInput";
 import Filters from "../components/Filters";
-import { bikes, types } from "../data/bikes";
-import { gearItems } from "../data/gear";
+import SEO from "../components/SEO";
+import { JsonLd } from "../components/JsonLd";
+import RentalInclusions from "../components/RentalInclusions";
+import { useCatalog } from "../catalogContext";
 import { useI18n } from "../i18nContext";
-import { formatMAD } from "../utils/formatCurrency";
+import { absoluteUrl } from "../seo/siteConfig";
+import { usePageSeo } from "../seo/usePageSeo";
+import { formatMAD, formatMadStringWithEuro } from "../utils/formatCurrency";
+
 // Page: Bikes
 
 const defaultFilters = {
@@ -17,18 +23,28 @@ const defaultFilters = {
   sort: "Newest",
 };
 
-const priceCheck = (price, range) => {
-  if (range === "Under 15000") return price < 15000;
-  if (range === "15000 - 20000") return price >= 15000 && price <= 20000;
-  if (range === "20000+") return price > 20000;
-  return true;
+const priceCheck = (price, rangeKey, priceRanges) => {
+  if (rangeKey === "All") return true;
+  const selectedRange = priceRanges.find((range) => range.key === rangeKey);
+  if (!selectedRange) return true;
+  if (selectedRange.min == null || selectedRange.max == null) return true;
+  return price >= selectedRange.min && price <= selectedRange.max;
+};
+
+const sortComparators = {
+  "Price: Low to High": (a, b) => a.price - b.price,
+  "Price: High to Low": (a, b) => b.price - a.price,
 };
 
 export default function Bikes() {
   const { t, lang } = useI18n();
+  const { bikes, bikeFilters, gear: gearItems } = useCatalog();
+  const seo = usePageSeo("bikes");
+  const { priceRanges, types } = bikeFilters;
   const location = useLocation();
   const [filters, setFilters] = useState(defaultFilters);
   const [selectedBikeIds, setSelectedBikeIds] = useState([]);
+  const [bikeQuantities, setBikeQuantities] = useState({});
   const [selectedGearIds, setSelectedGearIds] = useState([]);
   const [rental, setRental] = useState({
     name: "",
@@ -41,9 +57,9 @@ export default function Bikes() {
   const [toast, setToast] = useState(null);
   const toastTimerRef = useRef(null);
 
-  const whatsappNumber = "+212608188138";
+  const whatsappNumber = "+212624843746";
   const whatsappNumberClean = whatsappNumber.replace(/\D/g, "");
-  const emailAddress = "hello@riveline.studio";
+  const emailAddress = "ridekey.ma@gmail.com";
 
   const filtered = useMemo(() => {
     const byFilters = bikes.filter((bike) => {
@@ -52,19 +68,19 @@ export default function Bikes() {
       const matchesType = filters.type === "All" || bike.type === filters.type;
       const matchesEngine =
         filters.engine === "All" || bike.displacement === filters.engine;
-      const matchesPrice = priceCheck(bike.price, filters.price);
+      const matchesPrice = priceCheck(bike.price, filters.price, priceRanges);
       return matchesBrand && matchesType && matchesEngine && matchesPrice;
     });
 
     const sorted = [...byFilters];
-    if (filters.sort === "Price: Low to High") {
-      sorted.sort((a, b) => a.price - b.price);
-    }
-    if (filters.sort === "Price: High to Low") {
-      sorted.sort((a, b) => b.price - a.price);
+    const comparator = sortComparators[filters.sort];
+    if (comparator) {
+      sorted.sort(comparator);
     }
     return sorted;
-  }, [filters]);
+  }, [bikes, filters, priceRanges]);
+
+  const getBikeQuantity = (id) => Math.max(1, bikeQuantities[id] || 1);
 
   const selectedBikes = bikes.filter((bike) =>
     selectedBikeIds.includes(bike.id),
@@ -73,7 +89,6 @@ export default function Bikes() {
     selectedGearIds.includes(item.id),
   );
 
-  // Rental duration in days (min 1 day).
   const rentalDays = useMemo(() => {
     if (!rental.startDate || !rental.endDate) return 0;
     const start = new Date(rental.startDate);
@@ -83,11 +98,11 @@ export default function Bikes() {
     return Math.max(1, diff);
   }, [rental.startDate, rental.endDate]);
 
-  // Rental total includes bike daily rates + accessory daily rates.
   const rentalTotal = useMemo(() => {
     if (!rentalDays) return 0;
     const bikesTotal = selectedBikes.reduce(
-      (sum, bike) => sum + (bike.rentalRate || 0) * rentalDays,
+      (sum, bike) =>
+        sum + (bike.rentalRate || 0) * getBikeQuantity(bike.id) * rentalDays,
       0,
     );
     const gearDailyTotal = selectedGear.reduce(
@@ -96,7 +111,7 @@ export default function Bikes() {
     );
     const gearTotal = gearDailyTotal * rentalDays;
     return bikesTotal + gearTotal;
-  }, [selectedBikes, selectedGear, rentalDays]);
+  }, [bikeQuantities, rentalDays, selectedBikes, selectedGear]);
 
   const todayIso = () => new Date().toISOString().split("T")[0];
   const addDays = (iso, days) => {
@@ -112,6 +127,7 @@ export default function Bikes() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const selectId = params.get("select");
+    const quantityParam = params.get("quantity");
     const typeParam = params.get("type");
     const gearParam = params.get("gear");
     const renterName = params.get("renterName");
@@ -120,14 +136,24 @@ export default function Bikes() {
     const endDate = params.get("endDate");
     const pickupTime = params.get("pickupTime");
     const returnTime = params.get("returnTime");
+
     if (selectId && bikes.some((bike) => bike.id === selectId)) {
       setSelectedBikeIds((prev) =>
         prev.includes(selectId) ? prev : [...prev, selectId],
       );
+      if (quantityParam) {
+        const quantity = Math.max(1, Number(quantityParam) || 1);
+        setBikeQuantities((prev) => ({
+          ...prev,
+          [selectId]: quantity,
+        }));
+      }
     }
+
     if (typeParam && types.includes(typeParam)) {
       setFilters((prev) => ({ ...prev, type: typeParam }));
     }
+
     if (gearParam) {
       const gearIds = gearParam
         .split(",")
@@ -145,6 +171,7 @@ export default function Bikes() {
         });
       }
     }
+
     if (
       renterName ||
       renterPhone ||
@@ -166,18 +193,48 @@ export default function Bikes() {
   }, [location.search]);
 
   const total = useMemo(() => {
-    const bikesTotal = selectedBikes.reduce((sum, bike) => sum + bike.price, 0);
+    const bikesTotal = selectedBikes.reduce(
+      (sum, bike) => sum + bike.price * getBikeQuantity(bike.id),
+      0,
+    );
     const gearTotal = selectedGear.reduce(
       (sum, item) => sum + item.priceValue,
       0,
     );
     return bikesTotal + gearTotal + rentalTotal;
-  }, [selectedBikes, selectedGear, rentalTotal]);
+  }, [bikeQuantities, rentalTotal, selectedBikes, selectedGear]);
 
   const toggleBike = (id) => {
-    setSelectedBikeIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
+    setSelectedBikeIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      }
+      return [...prev, id];
+    });
+
+    setBikeQuantities((prev) => {
+      if (selectedBikeIds.includes(id)) {
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      }
+      return {
+        ...prev,
+        [id]: prev[id] || 1,
+      };
+    });
+  };
+
+  const setBikeQuantity = (id, nextValue) => {
+    const quantity = Math.max(1, Number(nextValue) || 1);
+    setBikeQuantities((prev) => ({
+      ...prev,
+      [id]: quantity,
+    }));
+
+    if (!selectedBikeIds.includes(id)) {
+      setSelectedBikeIds((prev) => [...prev, id]);
+    }
   };
 
   const toggleGear = (id) => {
@@ -186,64 +243,77 @@ export default function Bikes() {
     );
   };
 
-  // Build the WhatsApp payload so users can review before sending.
   const buildMessage = () => {
+    const bullet = "•";
     const bikeLines = selectedBikes.map(
-      (bike) => `• ${bike.name} — ${formatMAD(bike.price, lang)}`,
+      (bike) =>
+        `${bullet} ${bike.name} x${getBikeQuantity(bike.id)} - ${formatMAD(
+          bike.price * getBikeQuantity(bike.id),
+          lang,
+        )}`,
     );
     const gearLines = selectedGear.map(
-      (item) => `• ${item.name} — ${item.price} / day`,
+      (item) => `${bullet} ${item.name} - ${formatMadStringWithEuro(item.price, lang)} / day`,
     );
     const lines = [t.bikes.messageIntro, "", t.bikes.messageMotorcycles];
+
     if (bikeLines.length) {
       lines.push(...bikeLines);
     } else {
-      lines.push(`• ${t.bikes.messageNone}`);
+      lines.push(`${bullet} ${t.bikes.messageNone}`);
     }
+
     lines.push("", t.bikes.messageAccessories);
+
     if (gearLines.length) {
       lines.push(...gearLines);
     } else {
-      lines.push(`• ${t.bikes.messageNone}`);
+      lines.push(`${bullet} ${t.bikes.messageNone}`);
     }
+
     lines.push("", `${t.rentals.messageLabel || "Rental details"}:`);
     lines.push(
-      `• ${t.rentals.renterName || "Renter name"}: ${rental.name || "-"}`,
+      `${bullet} ${t.rentals.renterName || "Renter name"}: ${rental.name || "-"}`,
     );
     lines.push(
-      `• ${t.rentals.renterPhone || "Phone number"}: ${rental.phone || "-"}`,
+      `${bullet} ${t.rentals.renterPhone || "Phone number"}: ${rental.phone || "-"}`,
     );
     lines.push(
-      `• ${t.rentals.startDate || "Start date"}: ${rental.startDate || "-"}`,
+      `${bullet} ${t.rentals.startDate || "Start date"}: ${rental.startDate || "-"}`,
     );
     lines.push(
-      `• ${t.rentals.endDate || "End date"}: ${rental.endDate || "-"}`,
+      `${bullet} ${t.rentals.endDate || "End date"}: ${rental.endDate || "-"}`,
     );
     lines.push(
-      `• ${t.rentals.pickupTime || "Pickup time"}: ${rental.pickupTime || "-"}`,
+      `${bullet} ${t.rentals.pickupTime || "Pickup time"}: ${rental.pickupTime || "-"}`,
     );
     lines.push(
-      `• ${t.rentals.returnTime || "Return time"}: ${rental.returnTime || "-"}`,
+      `${bullet} ${t.rentals.returnTime || "Return time"}: ${rental.returnTime || "-"}`,
     );
+
     if (rentalDays && selectedBikes.length) {
-      lines.push(
-        `• ${t.rentals.badge || "Rentals"}: ${rentalDays} day(s)`,
-      );
+      lines.push(`${bullet} ${t.rentals.badge || "Rentals"}: ${rentalDays} day(s)`);
       selectedBikes.forEach((bike) => {
         lines.push(
-          `• ${bike.name} — ${formatMAD(bike.rentalRate || 0, lang)} / day`,
+          `${bullet} ${bike.name} x${getBikeQuantity(bike.id)} - ${formatMAD(
+            (bike.rentalRate || 0) * getBikeQuantity(bike.id),
+            lang,
+          )} / day`,
         );
       });
+
       if (selectedGear.length) {
-        lines.push(`• ${t.bikes.accessoriesTitle}:`);
+        lines.push(`${bullet} ${t.bikes.accessoriesTitle}:`);
         selectedGear.forEach((item) => {
-          lines.push(`• ${item.name} — ${item.price} / day`);
+          lines.push(`${bullet} ${item.name} - ${formatMadStringWithEuro(item.price, lang)} / day`);
         });
       }
+
       lines.push(
-        `• ${t.common.total} (${t.rentals.badge || "Rentals"}): ${formatMAD(rentalTotal, lang)}`,
+        `${bullet} ${t.common.total} (${t.rentals.badge || "Rentals"}): ${formatMAD(rentalTotal, lang)}`,
       );
     }
+
     lines.push("", `${t.bikes.messageTotal}: ${formatMAD(total, lang)}`);
     return lines.join("\n");
   };
@@ -261,6 +331,28 @@ export default function Bikes() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 pb-24 pt-28">
+      <SEO
+        {...seo}
+        keywords={[
+          "KTM rental Morocco",
+          "BMW GS rental Morocco",
+          "Suzuki DR650 rental Marrakech",
+          "location moto Maroc",
+        ]}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "RideKey Marrakech adventure motorcycle rentals",
+          itemListElement: bikes.map((bike, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: absoluteUrl(`/bikes/${bike.id}`),
+            name: `${bike.brand} ${bike.name}`,
+          })),
+        }}
+      />
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="section-subtitle">{t.common.inventory}</p>
@@ -270,6 +362,7 @@ export default function Bikes() {
           {filtered.length} {t.bikes.modelsAvailable}
         </p>
       </div>
+
       <div className="mt-6 rounded-2xl border border-white/10 bg-night px-5 py-4 text-sm text-slate-300">
         {t.bikes.selectPrompt}
       </div>
@@ -290,11 +383,50 @@ export default function Bikes() {
               />
               {t.common.select}
             </label>
+
             <BikeCard
               bike={bike}
               selected={selectedBikeIds.includes(bike.id)}
               onSelect={toggleBike}
             />
+
+            {selectedBikeIds.includes(bike.id) && (
+              <div className="mt-3 flex items-center justify-between rounded-2xl border border-white/10 bg-night/80 px-4 py-3 text-sm text-slate-300">
+                <span>{t.common.quantity}</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    className="h-8 w-8 rounded-full border border-white/20 text-white"
+                    onClick={() =>
+                      setBikeQuantity(bike.id, getBikeQuantity(bike.id) - 1)
+                    }
+                    aria-label={`Decrease quantity for ${bike.name}`}
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    min="1"
+                    value={getBikeQuantity(bike.id)}
+                    onChange={(event) =>
+                      setBikeQuantity(bike.id, event.target.value)
+                    }
+                    className="w-16 rounded-lg border-white/10 bg-ink text-center text-white"
+                    aria-label={`${t.common.quantity} ${bike.name}`}
+                  />
+                  <button
+                    type="button"
+                    className="h-8 w-8 rounded-full border border-white/20 text-white"
+                    onClick={() =>
+                      setBikeQuantity(bike.id, getBikeQuantity(bike.id) + 1)
+                    }
+                    aria-label={`Increase quantity for ${bike.name}`}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -320,7 +452,7 @@ export default function Bikes() {
                   aria-pressed={selectedGearIds.includes(item.id)}
                   onClick={() => toggleGear(item.id)}
                   className={`relative h-full w-full ${
-                    selectedGearIds.includes(item.id) ? 'ring-2 ring-accent' : ''
+                    selectedGearIds.includes(item.id) ? "ring-2 ring-accent" : ""
                   }`}
                 >
                   <img
@@ -366,7 +498,9 @@ export default function Bikes() {
                 <p className="mt-2 text-sm text-slate-300">
                   {t.bikes.rated} {item.rating.toFixed(2)} {t.bikes.outOf}
                 </p>
-                <p className="mt-2 text-sm text-slate-400">{item.price}</p>
+                <p className="mt-2 text-sm text-slate-400">
+                  {formatMadStringWithEuro(item.price, lang)}
+                </p>
                 {item.url ? (
                   <a
                     href={item.url}
@@ -437,10 +571,8 @@ export default function Bikes() {
           </label>
           <label className="text-slate-300">
             {t.rentals.startDate}
-            <input
-              type="date"
+            <CalendarInput
               min={todayIso()}
-              className="mt-2 w-full rounded-lg border-white/10 bg-ink text-white"
               value={rental.startDate}
               onChange={(event) =>
                 setRental({ ...rental, startDate: event.target.value })
@@ -449,10 +581,8 @@ export default function Bikes() {
           </label>
           <label className="text-slate-300">
             {t.rentals.endDate}
-            <input
-              type="date"
+            <CalendarInput
               min={minEndDate}
-              className="mt-2 w-full rounded-lg border-white/10 bg-ink text-white"
               value={rental.endDate}
               onChange={(event) =>
                 setRental({ ...rental, endDate: event.target.value })
@@ -481,6 +611,10 @@ export default function Bikes() {
               }
             />
           </label>
+        </div>
+
+        <div className="mt-6">
+          <RentalInclusions compact />
         </div>
 
         <div className="mt-6 rounded-2xl border border-white/10 bg-ink/60 p-4 text-sm text-slate-300">
@@ -514,6 +648,7 @@ export default function Bikes() {
             className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 text-sm text-white"
             onClick={() => {
               setSelectedBikeIds([]);
+              setBikeQuantities({});
               setSelectedGearIds([]);
             }}
           >
@@ -524,7 +659,7 @@ export default function Bikes() {
 
       {toast && (
         <div className="fixed bottom-24 right-6 z-50 rounded-2xl bg-night px-4 py-3 text-sm text-slate-200 shadow-glow">
-          {t.bikes.sendWhatsapp}…
+          {t.bikes.sendWhatsapp}...
         </div>
       )}
     </div>

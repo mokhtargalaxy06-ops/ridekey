@@ -1,0 +1,11 @@
+RewriteEngine On
+
+RewriteCond %{HTTP_HOST} ^www\.ridekey\.ma$ [NC]
+RewriteRule ^(.*)$ https://ridekey.ma/$1 [R=301,L]
+
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://ridekey.ma/$1 [R=301,L]
+
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "index, follow"
+</IfModule>

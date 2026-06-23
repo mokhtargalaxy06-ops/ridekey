@@ -11,22 +11,22 @@ export default function HeroSlider() {
     {
       title: t.home.heroTitle3,
       subtitle: t.home.heroSub3,
-      image: "/images/2025-KTM-390-Adventure-R-19.webp",
+      image: "/images/ktm390.webp",
     },
     {
       title: t.home.heroTitle1,
       subtitle: t.home.heroSub1,
-      image: "/images/suzUki800.avif",
+      image: "/images/DR650.jpg",
     },
     {
       title: t.home.heroTitle2,
       subtitle: t.home.heroSub2,
-      image: "/images/img3sliderHeroSection.jpg",
+      image: "/images/450MT.webp",
     },
     {
       title: t.home.heroTitle3,
       subtitle: t.home.heroSub3,
-      image: "/images/YAMAHA.webp",
+      image: "/images/vestrom800de.jpg",
     },
   ];
   const [active, setActive] = useState(0);
@@ -55,7 +55,7 @@ export default function HeroSlider() {
         >
           <img
             src={slide.image}
-            alt={slide.title}
+            alt={`${slide.title} - RideKey motorcycle rental Marrakech Morocco`}
             loading={index === 0 ? "eager" : "lazy"}
             decoding="async"
             width="3000"
@@ -65,9 +65,15 @@ export default function HeroSlider() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20" />
           <div className="absolute inset-0 flex flex-col justify-center px-12">
             <p className="section-subtitle">{t.home.heroBadge}</p>
-            <h1 className="mt-4 text-4xl font-semibold text-white md:text-6xl">
-              {slide.title}
-            </h1>
+            {index === active ? (
+              <h1 className="mt-4 text-4xl font-semibold text-white md:text-6xl">
+                {slide.title}
+              </h1>
+            ) : (
+              <p className="mt-4 text-4xl font-semibold text-white md:text-6xl">
+                {slide.title}
+              </p>
+            )}
             <p className="mt-4 max-w-md text-sm text-slate-200">
               {slide.subtitle}
             </p>
@@ -92,18 +98,18 @@ export default function HeroSlider() {
       <button
         type="button"
         onClick={prev}
-        aria-label="Previous slide"
+        aria-label={t.hero.previousSlide}
         className="absolute left-6 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-black/40 px-3 py-2 text-sm text-white"
       >
-        Prev
+        {t.common.previous}
       </button>
       <button
         type="button"
         onClick={next}
-        aria-label="Next slide"
+        aria-label={t.hero.nextSlide}
         className="absolute right-6 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-black/40 px-3 py-2 text-sm text-white"
       >
-        Next
+        {t.common.next}
       </button>
 
       <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
@@ -112,7 +118,7 @@ export default function HeroSlider() {
             key={index}
             type="button"
             onClick={() => goTo(index)}
-            aria-label={`Go to slide ${index + 1}`}
+            aria-label={`${t.hero.goToSlide} ${index + 1}`}
             className={`h-2 w-6 rounded-full transition ${
               index === active ? "bg-accent" : "bg-white/40"
             }`}

@@ -1,15 +1,19 @@
 import { Link, useParams } from 'react-router-dom'
 import { useMemo, useState } from 'react'
-import { bikes } from '../data/bikes'
-import { gearItems } from '../data/gear'
+import CalendarInput from '../components/CalendarInput'
+import SEO from '../components/SEO'
+import { BreadcrumbJsonLd, ProductJsonLd } from '../components/JsonLd'
+import RentalInclusions from '../components/RentalInclusions'
+import { useCatalog } from '../catalogContext'
 import { CalendarCheck, PhoneCall } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18nContext'
-import { formatMAD } from '../utils/formatCurrency'
+import { formatMAD, formatMadStringWithEuro } from '../utils/formatCurrency'
 // Page: BikeDetails
 
 export default function BikeDetails() {
   const { t, lang } = useI18n()
+  const { bikes, gear: gearItems } = useCatalog()
   const { id } = useParams()
   const bike = bikes.find((item) => item.id === id)
   const [selectedGearIds, setSelectedGearIds] = useState([])
@@ -53,6 +57,12 @@ export default function BikeDetails() {
   if (!bike) {
     return (
       <div className="mx-auto max-w-4xl px-6 pb-24 pt-28">
+        <SEO
+          title="Motorcycle Not Found | RideKey Morocco"
+          description="This RideKey Morocco motorcycle rental page could not be found."
+          path={`/bikes/${id || ''}`}
+          noindex
+        />
         <h1 className="text-2xl font-semibold text-white">{t.details.notFound}</h1>
         <Link to="/bikes" className="mt-4 inline-block text-accent">
           {t.details.back}
@@ -63,6 +73,26 @@ export default function BikeDetails() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 pb-24 pt-28">
+      <SEO
+        title={`${bike.brand} ${bike.name} Rental Marrakech | RideKey Morocco`}
+        description={`Rent the ${bike.brand} ${bike.name} in Marrakech with RideKey Morocco. ${bike.displacement} ${bike.type} motorcycle for Atlas Mountains, desert routes and Morocco adventure travel.`}
+        path={`/bikes/${bike.id}`}
+        image={bike.image}
+        keywords={[
+          `${bike.brand} rental Morocco`,
+          `${bike.name} rental Marrakech`,
+          'motorcycle rental Marrakech',
+          'adventure motorcycle Morocco'
+        ]}
+      />
+      <ProductJsonLd bike={bike} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', path: '/' },
+          { name: 'Motorcycles', path: '/bikes' },
+          { name: `${bike.brand} ${bike.name}`, path: `/bikes/${bike.id}` }
+        ]}
+      />
       <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
         <div>
           <motion.div
@@ -73,7 +103,7 @@ export default function BikeDetails() {
           >
             <img
               src={bike.image}
-              alt={bike.name}
+              alt={`${bike.brand} ${bike.name} motorcycle rental Marrakech Morocco`}
               loading="eager"
               decoding="async"
               width="1200"
@@ -154,10 +184,8 @@ export default function BikeDetails() {
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="text-slate-300">
                   {t.rentals.startDate}
-                  <input
-                    type="date"
+                  <CalendarInput
                     min={new Date().toISOString().split("T")[0]}
-                    className="mt-2 w-full rounded-lg border-white/10 bg-ink text-white"
                     value={rental.startDate}
                     onChange={(event) =>
                       setRental({ ...rental, startDate: event.target.value })
@@ -166,10 +194,8 @@ export default function BikeDetails() {
                 </label>
                 <label className="text-slate-300">
                   {t.rentals.endDate}
-                  <input
-                    type="date"
+                  <CalendarInput
                     min={minEndDate}
-                    className="mt-2 w-full rounded-lg border-white/10 bg-ink text-white"
                     value={rental.endDate}
                     onChange={(event) =>
                       setRental({ ...rental, endDate: event.target.value })
@@ -203,6 +229,7 @@ export default function BikeDetails() {
               </div>
             </div>
           </div>
+          <RentalInclusions compact />
           <div className="rounded-2xl border border-white/10 p-4 text-sm">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
               {t.bikes.accessoriesTitle}
@@ -237,7 +264,9 @@ export default function BikeDetails() {
                       ) : (
                         <span className="text-slate-200">{item.name}</span>
                       )}
-                      <p className="text-xs text-slate-400">{item.price}</p>
+                      <p className="text-xs text-slate-400">
+                        {formatMadStringWithEuro(item.price, lang)}
+                      </p>
                     </div>
                   </div>
                   <input
