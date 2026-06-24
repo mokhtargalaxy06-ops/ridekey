@@ -120,4 +120,52 @@ class AdminDashboardTest extends TestCase
 
         $this->assertDatabaseMissing('blogs', ['id' => 'dashboard-crud-post']);
     }
+
+    public function test_admin_can_manage_custom_pages_but_cannot_delete_core_pages(): void
+    {
+        $headers = ['Authorization' => 'Bearer ridekey-local-admin-token'];
+        $payload = [
+            'id' => 'custom-cms-page',
+            'title' => 'Custom CMS Page',
+            'path' => '/custom-cms-page',
+            'seoTitle' => 'Custom CMS Page',
+            'seoDescription' => 'A custom page managed by the dashboard.',
+            'heroImage' => null,
+            'isPublished' => false,
+            'content' => [
+                'heading' => 'Custom CMS Page',
+                'intro' => 'Page introduction.',
+                'sections' => [
+                    ['heading' => 'Section', 'body' => 'Section body.'],
+                ],
+            ],
+        ];
+
+        $this->postJson('/api/admin/pages', $payload, $headers)
+            ->assertCreated()
+            ->assertJsonPath('data.path', '/custom-cms-page')
+            ->assertJsonPath('data.isPublished', false);
+
+        $payload['isPublished'] = true;
+        $payload['title'] = 'Updated Custom CMS Page';
+
+        $this->putJson('/api/admin/pages/custom-cms-page', $payload, $headers)
+            ->assertOk()
+            ->assertJsonPath('data.title', 'Updated Custom CMS Page')
+            ->assertJsonPath('data.isPublished', true);
+
+        $this->deleteJson('/api/admin/pages/custom-cms-page', [], $headers)
+            ->assertOk();
+
+        \App\Models\Page::create([
+            'id' => 'home',
+            'title' => 'Home',
+            'path' => '/',
+            'isPublished' => true,
+            'content' => [],
+        ]);
+
+        $this->deleteJson('/api/admin/pages/home', [], $headers)
+            ->assertStatus(422);
+    }
 }

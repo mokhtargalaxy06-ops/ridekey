@@ -8,6 +8,7 @@ import {
 } from '../services/ridekeyApi'
 import { notifyCatalogChanged, useCatalog } from '../catalogContext'
 import BlogManager from '../components/dashboard/BlogManager'
+import PageManager from '../components/dashboard/PageManager'
 
 const resources = {
   bikes: {
@@ -415,6 +416,14 @@ export default function Dashboard() {
 
       {resource === 'blogs' ? (
         <BlogManager
+          items={items}
+          token={token}
+          loadItems={loadItems}
+          refreshCatalog={refreshCatalog}
+          setStatus={setStatus}
+        />
+      ) : resource === 'pages' ? (
+        <PageManager
           items={items}
           token={token}
           loadItems={loadItems}

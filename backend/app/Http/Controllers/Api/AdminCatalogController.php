@@ -17,6 +17,17 @@ use Illuminate\Support\Str;
 
 class AdminCatalogController extends Controller
 {
+    private const SYSTEM_PAGE_PATHS = [
+        '/',
+        '/bikes',
+        '/rentals',
+        '/rides',
+        '/about',
+        '/blog',
+        '/contact',
+        '/dashboard',
+    ];
+
     private const RESOURCES = [
         'bikes' => Bike::class,
         'gear' => GearItem::class,
@@ -72,7 +83,17 @@ class AdminCatalogController extends Controller
         $this->authorizeAdmin($request);
 
         $model = $this->modelFor($resource);
-        $model::query()->findOrFail($id)->delete();
+        $record = $model::query()->findOrFail($id);
+
+        if ($resource === 'pages') {
+            abort_if(
+                in_array($record->path, self::SYSTEM_PAGE_PATHS, true),
+                422,
+                'Core application pages cannot be deleted. Save the page as a draft instead.',
+            );
+        }
+
+        $record->delete();
 
         return response()->json(['message' => 'Deleted.']);
     }
@@ -135,6 +156,7 @@ class AdminCatalogController extends Controller
         $this->ensurePayloadId($request, $id);
 
         $unique = Rule::unique($this->tableFor($resource), 'id')->ignore($id, 'id');
+        $uniquePagePath = Rule::unique('pages', 'path')->ignore($id, 'id');
 
         return match ($resource) {
             'bikes' => $request->validate([
@@ -195,11 +217,11 @@ class AdminCatalogController extends Controller
             'pages' => $request->validate([
                 'id' => ['required', 'string', 'max:120', $unique],
                 'title' => ['required', 'string', 'max:180'],
-                'path' => ['required', 'string', 'max:180'],
+                'path' => ['required', 'string', 'max:180', 'regex:/^\/(?:[a-z0-9_-]+\/?)*$/', $uniquePagePath],
                 'seoTitle' => ['nullable', 'string', 'max:240'],
                 'seoDescription' => ['nullable', 'string'],
                 'heroImage' => ['nullable', 'string'],
-                'isPublished' => ['nullable', 'boolean'],
+                'isPublished' => ['required', 'boolean'],
                 'content' => ['nullable', 'array'],
             ]),
         };
