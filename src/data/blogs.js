@@ -6,6 +6,7 @@ export const blogs = [
     date: "May 16, 2026",
     publishedAt: "2026-05-16",
     updatedAt: "2026-05-16",
+    isPublished: true,
     tag: "Morocco Routes",
     image: "/images/YAMAHA.webp",
     excerpt:
@@ -40,6 +41,7 @@ export const blogs = [
     date: "May 10, 2026",
     publishedAt: "2026-05-10",
     updatedAt: "2026-05-16",
+    isPublished: true,
     tag: "Atlas Mountains",
     image: "/images/vestrom800de.jpg",
     excerpt:
@@ -74,6 +76,7 @@ export const blogs = [
     date: "May 04, 2026",
     publishedAt: "2026-05-04",
     updatedAt: "2026-05-16",
+    isPublished: true,
     tag: "Desert Tours",
     image: "/images/agafay.jfif",
     excerpt:
@@ -108,6 +111,7 @@ export const blogs = [
     date: "Apr 27, 2026",
     publishedAt: "2026-04-27",
     updatedAt: "2026-05-16",
+    isPublished: true,
     tag: "KTM Rental",
     image: "/images/ktm390.webp",
     excerpt:
@@ -142,6 +146,7 @@ export const blogs = [
     date: "Apr 20, 2026",
     publishedAt: "2026-04-20",
     updatedAt: "2026-05-16",
+    isPublished: true,
     tag: "Rental Guide",
     image: "/images/DR650.jpg",
     excerpt:

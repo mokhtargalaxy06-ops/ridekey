@@ -105,7 +105,16 @@ class CatalogController extends Controller
 
     private function blogsData(): array
     {
-        return $this->databaseRows(Blog::class, 'blogs', RideKeyCatalog::blogs());
+        if (! Schema::hasTable('blogs') || Blog::query()->count() === 0) {
+            return RideKeyCatalog::blogs();
+        }
+
+        return Blog::query()
+            ->where('isPublished', true)
+            ->orderByDesc('publishedAt')
+            ->get()
+            ->map(fn (Blog $item) => $item->toArray())
+            ->all();
     }
 
     private function pagesData(): array

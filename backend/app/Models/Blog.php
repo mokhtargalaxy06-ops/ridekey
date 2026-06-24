@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
     'id', 'title', 'seoTitle', 'date', 'publishedAt', 'updatedAt', 'tag',
-    'image', 'excerpt', 'keywords', 'sections',
+    'isPublished', 'image', 'excerpt', 'keywords', 'sections',
 ])]
 class Blog extends Model
 {
@@ -22,6 +22,7 @@ class Blog extends Model
             'sections' => 'array',
             'publishedAt' => 'date:Y-m-d',
             'updatedAt' => 'date:Y-m-d',
+            'isPublished' => 'boolean',
         ];
     }
 }

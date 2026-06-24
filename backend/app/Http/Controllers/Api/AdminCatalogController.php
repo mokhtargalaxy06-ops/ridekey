@@ -31,9 +31,15 @@ class AdminCatalogController extends Controller
 
         $model = $this->modelFor($resource);
 
-        return response()->json([
-            'data' => $model::query()->orderBy('created_at')->get(),
-        ]);
+        $query = $model::query();
+
+        if ($resource === 'blogs') {
+            $query->orderByDesc('updatedAt')->orderByDesc('created_at');
+        } else {
+            $query->orderBy('created_at');
+        }
+
+        return response()->json(['data' => $query->get()]);
     }
 
     public function store(Request $request, string $resource): JsonResponse
@@ -178,6 +184,7 @@ class AdminCatalogController extends Controller
                 'date' => ['nullable', 'string', 'max:80'],
                 'publishedAt' => ['nullable', 'date'],
                 'updatedAt' => ['nullable', 'date'],
+                'isPublished' => ['required', 'boolean'],
                 'tag' => ['nullable', 'string', 'max:120'],
                 'image' => ['nullable', 'string'],
                 'excerpt' => ['nullable', 'string'],

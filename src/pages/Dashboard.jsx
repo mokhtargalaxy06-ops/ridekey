@@ -7,6 +7,7 @@ import {
   uploadAdminMedia,
 } from '../services/ridekeyApi'
 import { notifyCatalogChanged, useCatalog } from '../catalogContext'
+import BlogManager from '../components/dashboard/BlogManager'
 
 const resources = {
   bikes: {
@@ -412,6 +413,15 @@ export default function Dashboard() {
 
       {status && <p className="mt-5 text-sm text-slate-300">{status}</p>}
 
+      {resource === 'blogs' ? (
+        <BlogManager
+          items={items}
+          token={token}
+          loadItems={loadItems}
+          refreshCatalog={refreshCatalog}
+          setStatus={setStatus}
+        />
+      ) : (
       <div className="mt-8 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <form onSubmit={handleSave} className="rounded-2xl border border-white/10 bg-night p-6">
           <h2 className="text-xl font-semibold text-white">{title}</h2>
@@ -623,6 +633,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      )}
     </div>
   )
 }

@@ -74,4 +74,50 @@ class AdminDashboardTest extends TestCase
         $this->getJson('/api/admin/bikes')
             ->assertUnauthorized();
     }
+
+    public function test_admin_can_create_update_and_delete_blog_posts(): void
+    {
+        $headers = ['Authorization' => 'Bearer ridekey-local-admin-token'];
+        $payload = [
+            'id' => 'dashboard-crud-post',
+            'title' => 'Dashboard CRUD Post',
+            'seoTitle' => 'Dashboard CRUD Post',
+            'date' => 'Jun 24, 2026',
+            'publishedAt' => '2026-06-24',
+            'updatedAt' => '2026-06-24',
+            'isPublished' => false,
+            'tag' => 'Testing',
+            'image' => null,
+            'excerpt' => 'A test article created through the dashboard API.',
+            'keywords' => ['dashboard', 'crud'],
+            'sections' => [
+                ['heading' => 'First section', 'body' => 'Article body.'],
+            ],
+        ];
+
+        $this->postJson('/api/admin/blogs', $payload, $headers)
+            ->assertCreated()
+            ->assertJsonPath('data.isPublished', false);
+
+        $this->getJson('/api/blogs')
+            ->assertOk()
+            ->assertJsonMissing(['id' => 'dashboard-crud-post']);
+
+        $payload['title'] = 'Published Dashboard CRUD Post';
+        $payload['isPublished'] = true;
+
+        $this->putJson('/api/admin/blogs/dashboard-crud-post', $payload, $headers)
+            ->assertOk()
+            ->assertJsonPath('data.title', 'Published Dashboard CRUD Post')
+            ->assertJsonPath('data.isPublished', true);
+
+        $this->getJson('/api/blogs')
+            ->assertOk()
+            ->assertJsonFragment(['id' => 'dashboard-crud-post']);
+
+        $this->deleteJson('/api/admin/blogs/dashboard-crud-post', [], $headers)
+            ->assertOk();
+
+        $this->assertDatabaseMissing('blogs', ['id' => 'dashboard-crud-post']);
+    }
 }
