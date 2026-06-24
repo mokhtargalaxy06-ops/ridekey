@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   adminLogin,
+  ADMIN_SESSION_EXPIRED_EVENT,
   deleteAdminResource,
   fetchAdminResource,
   saveAdminResource,
@@ -36,6 +37,7 @@ const resources = {
       price: 0,
       rentalRate: 0,
     },
+    required: ['name', 'brand', 'type', 'price', 'rentalRate'],
   },
   blogs: {
     label: 'Blogs',
@@ -58,6 +60,7 @@ const resources = {
       sections: [],
     },
     nullable: ['seoTitle', 'date', 'publishedAt', 'updatedAt', 'tag', 'image', 'excerpt'],
+    required: ['title', 'excerpt'],
   },
   gear: {
     label: 'Gear',
@@ -69,6 +72,7 @@ const resources = {
       priceValue: 0,
     },
     nullable: ['category', 'image', 'url', 'cta'],
+    required: ['name', 'rating', 'price', 'priceValue'],
   },
   rides: {
     label: 'Rides',
@@ -81,6 +85,7 @@ const resources = {
       price: 'MAD 0',
     },
     nullable: ['startDate', 'startTime', 'endDate', 'endTime', 'image'],
+    required: ['title', 'price'],
   },
   pages: {
     label: 'Pages',
@@ -99,6 +104,7 @@ const resources = {
     jsonDefaults: {
       content: {},
     },
+    required: ['title', 'path'],
   },
 }
 
@@ -251,6 +257,17 @@ export default function Dashboard() {
     loadItems().catch((error) => setStatus(error.message))
   }, [resource, token])
 
+  useEffect(() => {
+    const handleExpiredSession = () => {
+      setToken('')
+      setItems([])
+      setStatus('Your dashboard session expired. Please sign in again.')
+    }
+
+    window.addEventListener(ADMIN_SESSION_EXPIRED_EVENT, handleExpiredSession)
+    return () => window.removeEventListener(ADMIN_SESSION_EXPIRED_EVENT, handleExpiredSession)
+  }, [])
+
   const title = useMemo(
     () => (editingId ? `Edit ${config.label.slice(0, -1)}` : `Create ${config.label.slice(0, -1)}`),
     [config.label, editingId],
@@ -280,7 +297,7 @@ export default function Dashboard() {
       await loadItems()
       await refreshCatalog()
       notifyCatalogChanged()
-      setStatus('Saved.')
+      setStatus(`${payload.name || payload.title || config.label.slice(0, -1)} saved successfully.`)
     } catch (error) {
       setStatus(error.message)
     }
@@ -444,6 +461,7 @@ export default function Dashboard() {
               const isUploadableGallery = field === 'gallery'
               const isUploadableVideo = field === 'video'
               const isBoolean = config.booleans?.includes(field)
+              const isRequired = config.required?.includes(field)
 
               if (isRideMedia) {
                 const video = parseJsonPreview(form.video)
@@ -527,9 +545,11 @@ export default function Dashboard() {
               return (
                 <label key={field} className="text-sm text-slate-300">
                   {field}
+                  {isRequired && <span className="ml-1 text-accent">*</span>}
                   {isBoolean ? (
                     <select
                       className="mt-2 w-full rounded-lg border-white/10 bg-ink text-white"
+                      required={isRequired}
                       value={String(form[field] ?? true)}
                       onChange={(event) => setForm({ ...form, [field]: event.target.value })}
                     >
@@ -540,12 +560,14 @@ export default function Dashboard() {
                     <textarea
                       rows={field === 'sections' ? 8 : 4}
                       className="mt-2 w-full rounded-lg border-white/10 bg-ink text-white"
+                      required={isRequired}
                       value={form[field] ?? ''}
                       onChange={(event) => setForm({ ...form, [field]: event.target.value })}
                     />
                   ) : (
                     <input
                       className="mt-2 w-full rounded-lg border-white/10 bg-ink text-white"
+                      required={isRequired}
                       value={form[field] ?? ''}
                       onChange={(event) => setForm({ ...form, [field]: event.target.value })}
                     />

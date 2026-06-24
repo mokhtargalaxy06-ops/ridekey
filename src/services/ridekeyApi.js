@@ -7,6 +7,14 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (import.meta.env.PROD ? 'https://api.ridekey.ma/api' : 'http://127.0.0.1:8001/api')
 
+export const ADMIN_SESSION_EXPIRED_EVENT = 'ridekey:admin-session-expired'
+
+const expireAdminSession = () => {
+  if (typeof window === 'undefined') return
+  localStorage.removeItem('ridekey_admin_token')
+  window.dispatchEvent(new CustomEvent(ADMIN_SESSION_EXPIRED_EVENT))
+}
+
 const getJson = async (path) => {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
@@ -105,6 +113,9 @@ const adminRequest = async (resource, token, options = {}) => {
   })
 
   if (!response.ok) {
+    if (response.status === 401) {
+      expireAdminSession()
+    }
     const error = await response.json().catch(() => ({}))
     const validationMessages = error.errors
       ? Object.values(error.errors).flat().join(' ')
@@ -146,6 +157,9 @@ export const uploadAdminMedia = async (token, file, folder = 'media') => {
   })
 
   if (!response.ok) {
+    if (response.status === 401) {
+      expireAdminSession()
+    }
     const error = await response.json().catch(() => ({}))
     throw new Error(error.message || `Upload failed: ${response.status}`)
   }
